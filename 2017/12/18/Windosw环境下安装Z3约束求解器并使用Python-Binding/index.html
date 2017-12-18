@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Windosw环境下安装Z3约束求解器并使用Python Binding | Headwind&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用。Z3 约束求解器是针对 Satisfiability modulo theories Problem 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windosw环境下安装Z3约束求解器并使用Python Binding">
+<meta property="og:url" content="http://h34dw1nd.github.io/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/index.html">
+<meta property="og:site_name" content="Headwind&#39;s Blog">
+<meta property="og:description" content="Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用。Z3 约束求解器是针对 Satisfiability modulo theories Problem 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决">
+<meta property="og:updated_time" content="2017-12-18T13:56:40.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windosw环境下安装Z3约束求解器并使用Python Binding">
+<meta name="twitter:description" content="Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用。Z3 约束求解器是针对 Satisfiability modulo theories Problem 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决">
+  
+    <link rel="alternate" href="/atom.xml" title="Headwind&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Headwind&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://h34dw1nd.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Windosw环境下安装Z3约束求解器并使用Python-Binding" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/" class="article-date">
+  <time datetime="2017-12-18T03:23:50.000Z" itemprop="datePublished">2017-12-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windosw环境下安装Z3约束求解器并使用Python Binding
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用。<br>Z3 约束求解器是针对 Satisfiability modulo theories Problem 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决定性问题。虽然 Z3 功能强大，但是从理论上来说，大部分 SMT 问题的时间复杂度都过高，根本不可能在有限时间内解决。所以千万不要把 Z3 想象得过于万能。<br>Z3 在工业应用中实际上常见于软件验证、程序分析等。然而由于功能实在强大，也被用于很多其他领域。就 CTF 领域来说，能够用约束求解器搞定的问题常见于密码题、二进制逆向、符号执行、Fuzzing 模糊测试等。<br>Z3 本身提供一个类似于 Lisp 的内置语言，但是实际使用中，一般使用 Python Binding 操作会比较方便。<br>本文记录了如何在Windows(10 x64)环境下安装Z3并配置使用 Python Binding 。</p>
+<h2 id="0x00-安装前准备"><a href="#0x00-安装前准备" class="headerlink" title="0x00 安装前准备"></a>0x00 安装前准备</h2><p>由于在 Windows 环境下需要用到 Visual Studio Command Prompt 来 build Z3 ，所以需要安装 Visual Studio（或者直接安装 nmake ），我使用的是 Visual Studio 2017 ，直接在开始菜单中找到 VS2017 的文件夹，下拉可以找到 x64 Native Tools Command Prompt for VS 2017</p>
+<h2 id="0x01-安装Z3"><a href="#0x01-安装Z3" class="headerlink" title="0x01 安装Z3"></a>0x01 安装Z3</h2><p>从 github 上 clone Z3</p>
+<pre><code>git clone https://github.com/Z3Prover/z3.git
+</code></pre><p>打开 x64 Native Tools Command Prompt for VS 2017 ，命令行中进入 Z3 文件夹，执行命令：</p>
+<pre><code>python scripts/mk_make.py -x --python
+cd build
+nmake
+</code></pre><p>经过漫长的等待，当看到</p>
+<pre><code>Z3 was successfully built.
+&quot;Z3Py scripts can already be executed in the &apos;build\python&apos; directory.&quot;
+&quot;Z3Py scripts stored in arbitrary directories can be executed if the &apos;build\python&apos; directory is added to the PYTHONPATH environment variable and the &apos;build&apos; directory is added to the PATH environment variable.
+</code></pre><p>就说明安装成功了。</p>
+<h2 id="0x02-将-Z3-路径加入-PYTHONPATH"><a href="#0x02-将-Z3-路径加入-PYTHONPATH" class="headerlink" title="0x02 将 Z3 路径加入 PYTHONPATH"></a>0x02 将 Z3 路径加入 PYTHONPATH</h2><p>我的电脑-&gt;右键-&gt;属性-&gt;高级系统设置-&gt;环境变量，如果没有 PYTHONPATH 需要自行创建，在 python 命令行界面输入：</p>
+<pre><code>import os 
+print(os.sys.path)
+</code></pre><p>可以看到当前的 PYTHONPATH ，将其加入环境变量，并把Z3文件夹下的 build\python 文件夹也加入 PYTHONPATH 。<br>测试一下，在 python 命令行下：</p>
+<pre><code>from z3 import *
+x = Int(&apos;x&apos;)
+y = Int(&apos;y&apos;)
+solve(x &gt; 2, y &lt; 10, x + 2*y == 7)
+</code></pre><p>一般会看到结果：</p>
+<pre><code>[y = 0, x = 7] 
+</code></pre><p>说明配置成功。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30548907" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30548907</a><br><a href="https://github.com/Z3Prover/z3" target="_blank" rel="noopener">https://github.com/Z3Prover/z3</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/" data-id="cjbc9l1gm0005ukvkc1o0wr7m" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/09/07/struts2-S2-052-复现及分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">struts2 S2-052 复现及分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞分析/">漏洞分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/瞎写/">瞎写</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/漏洞分析/" style="font-size: 10px;">漏洞分析</a> <a href="/tags/瞎写/" style="font-size: 10px;">瞎写</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/">Windosw环境下安装Z3约束求解器并使用Python Binding</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/07/struts2-S2-052-复现及分析/">struts2 S2-052 复现及分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/">CTFd--Flask--使用flask-migrate迁移数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-发邮件的坑/">CTFd--发邮件的坑</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/">第十届全国大学生信息安全竞赛 部分web-writeup</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Headwind<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

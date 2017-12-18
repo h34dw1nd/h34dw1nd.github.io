@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>第十届全国大学生信息安全竞赛 部分web-writeup | Headwind&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上周末打了第十届全国大学生信息安全竞赛，题目是不错的，但是这个比赛某些方面十分的神奇，呵呵~这边记录一下自己做出来的两道web题（太菜了）ven师傅的wp:http://www.venenof.com/index.php/archives/386/土师傅的wp:http://lorexxar.cn/2017/07/11/guosai2017/柠檬师傅的wp:http://www.cnblogs.c">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十届全国大学生信息安全竞赛 部分web-writeup">
+<meta property="og:url" content="http://h34dw1nd.github.io/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/index.html">
+<meta property="og:site_name" content="Headwind&#39;s Blog">
+<meta property="og:description" content="上周末打了第十届全国大学生信息安全竞赛，题目是不错的，但是这个比赛某些方面十分的神奇，呵呵~这边记录一下自己做出来的两道web题（太菜了）ven师傅的wp:http://www.venenof.com/index.php/archives/386/土师傅的wp:http://lorexxar.cn/2017/07/11/guosai2017/柠檬师傅的wp:http://www.cnblogs.c">
+<meta property="og:updated_time" content="2017-12-18T13:49:01.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第十届全国大学生信息安全竞赛 部分web-writeup">
+<meta name="twitter:description" content="上周末打了第十届全国大学生信息安全竞赛，题目是不错的，但是这个比赛某些方面十分的神奇，呵呵~这边记录一下自己做出来的两道web题（太菜了）ven师傅的wp:http://www.venenof.com/index.php/archives/386/土师傅的wp:http://lorexxar.cn/2017/07/11/guosai2017/柠檬师傅的wp:http://www.cnblogs.c">
+  
+    <link rel="alternate" href="/atom.xml" title="Headwind&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Headwind&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://h34dw1nd.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-第十届全国大学生信息安全竞赛-部分web-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/" class="article-date">
+  <time datetime="2017-07-12T11:23:16.000Z" itemprop="datePublished">2017-07-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第十届全国大学生信息安全竞赛 部分web-writeup
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上周末打了第十届全国大学生信息安全竞赛，题目是不错的，但是这个比赛某些方面十分的神奇，呵呵~<br>这边记录一下自己做出来的两道web题（太菜了）<br>ven师傅的wp:<a href="http://www.venenof.com/index.php/archives/386/" target="_blank" rel="noopener">http://www.venenof.com/index.php/archives/386/</a><br>土师傅的wp:<a href="http://lorexxar.cn/2017/07/11/guosai2017/" target="_blank" rel="noopener">http://lorexxar.cn/2017/07/11/guosai2017/</a><br>柠檬师傅的wp:<a href="http://www.cnblogs.com/iamstudy/articles/2017_quanguo_ctf_web_writeup.html" target="_blank" rel="noopener">http://www.cnblogs.com/iamstudy/articles/2017_quanguo_ctf_web_writeup.html</a></p>
+<h2 id="php-exercise"><a href="#php-exercise" class="headerlink" title="php exercise"></a>php exercise</h2><p>php代码执行<br>我的方法：print_r(scandir(‘./‘))列文件，file_put_contents(“121.php”,”&lt;?php include ‘flag.php’; echo $flag;?&gt;”)，用bp的intruder维持121.php的文件内容（智商太低）<br>其他方法：print_r(glob(‘./f*’))列文件，show_source读文件内容</p>
+<h2 id="wanna-to-see-your-hat"><a href="#wanna-to-see-your-hat" class="headerlink" title="wanna to see your hat?"></a>wanna to see your hat?</h2><p>抓包可以看到<code>select count(*) from t_info where username = &#39;aaa&#39; or nickname = &#39;aaa&#39;</code><br>发现.svn泄漏<br>审计一波，关键点在：</p>
+<pre><code>if(isset($_SESSION[&apos;hat&apos;])){
+if($_SESSION[&apos;hat&apos;]==&apos;green&apos;){
+output(&quot;&lt;img src=&apos;green-hat-1.jpg&apos;&gt;&quot;,10);
+}else{
+output(&quot;&lt;img src=&apos;black-fedora.jpg&apos;&gt;&quot;,1);
+echo $flag;
+}
+</code></pre><p>在login.php中设置session：</p>
+<pre><code>if (isset($_POST[&quot;name&quot;])){
+</code></pre><p>  $name = str_replace(“‘“, “”, trim(waf($_POST[“name”])));<br>  if (strlen($name) &gt; 11){<br>    echo(“&lt;script&gt;alert(‘name too long’)&lt;/script&gt;”);<br>  }else{<br>    $sql = “select count(*) from t_info where username = ‘$name’ or nickname = ‘$name’”;<br>    echo $sql;<br>    $result = mysql_query($sql);<br>    $row = mysql_fetch_array($result);<br>    if ($row[0]){<br>      $_SESSION[‘hat’] = ‘black’;<br>      echo ‘good job’;<br>    }else{<br>    $_SESSION[‘hat’] = ‘green’;<br>    }<br>    header(“Location: index.php”);<br>  }</p>
+<p>}</p>
+<p>其中有这么一句话：<code>$name = str_replace(&quot;&#39;&quot;, &quot;&quot;, trim(waf($_POST[&quot;name&quot;])));</code><br>意味着addslashes转义后的单引号会被吃掉，可以利用这个将sql语句中原本的单引号吃掉<br>payload：<code>select count(*) from t_info where username = &#39;or(1=1)#\&#39; or nickname = &#39;or(1=1)#\&#39;</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/" data-id="cjbc9l1h3000fukvkvpnukdnt" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/16/CTFd-发邮件的坑/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          CTFd--发邮件的坑
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/06/14/收集一下各位师傅的个人博客和各种安全博客（个人备忘）/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">收集一下各位师傅的个人博客和各种安全博客（个人备忘）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞分析/">漏洞分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/瞎写/">瞎写</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/漏洞分析/" style="font-size: 10px;">漏洞分析</a> <a href="/tags/瞎写/" style="font-size: 10px;">瞎写</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/">Windosw环境下安装Z3约束求解器并使用Python Binding</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/07/struts2-S2-052-复现及分析/">struts2 S2-052 复现及分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/">CTFd--Flask--使用flask-migrate迁移数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-发邮件的坑/">CTFd--发邮件的坑</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/">第十届全国大学生信息安全竞赛 部分web-writeup</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Headwind<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

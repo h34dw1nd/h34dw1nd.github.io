@@ -5,14 +5,19 @@
   
 
   
-  <title>Tag: CTF | Headwind&#39;s Blog</title>
+  <title>CTFd--发邮件的坑 | Headwind&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Headwind&#39;s Blog">
-<meta property="og:url" content="http://h34dw1nd.github.io/tags/CTF/index.html">
+  <meta name="description" content="CTFd/utils.py中，smtp邮件服务器鉴权的函数为： def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None): smtp = smtplib.SMTP(host, port) smtp.ehlo() if TLS:     smtp.starttls()     smtp.ehlo() smtp">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTFd--发邮件的坑">
+<meta property="og:url" content="http://h34dw1nd.github.io/2017/07/16/CTFd-发邮件的坑/index.html">
 <meta property="og:site_name" content="Headwind&#39;s Blog">
+<meta property="og:description" content="CTFd/utils.py中，smtp邮件服务器鉴权的函数为： def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None): smtp = smtplib.SMTP(host, port) smtp.ehlo() if TLS:     smtp.starttls()     smtp.ehlo() smtp">
+<meta property="og:updated_time" content="2017-12-18T13:49:52.528Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Headwind&#39;s Blog">
+<meta name="twitter:title" content="CTFd--发邮件的坑">
+<meta name="twitter:description" content="CTFd/utils.py中，smtp邮件服务器鉴权的函数为： def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None): smtp = smtplib.SMTP(host, port) smtp.ehlo() if TLS:     smtp.starttls()     smtp.ehlo() smtp">
   
     <link rel="alternate" href="/atom.xml" title="Headwind&#39;s Blog" type="application/atom+xml">
   
@@ -59,154 +64,83 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/" class="archive-article-date">
-  <time datetime="2017-12-18T03:23:50.000Z" itemprop="datePublished">Dec 18</time>
+        <section id="main"><article id="post-CTFd-发邮件的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/16/CTFd-发邮件的坑/" class="article-date">
+  <time datetime="2017-07-15T19:48:26.000Z" itemprop="datePublished">2017-07-16</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/">Windosw环境下安装Z3约束求解器并使用Python Binding</a>
+    <h1 class="article-title" itemprop="name">
+      CTFd--发邮件的坑
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/" class="archive-article-date">
-  <time datetime="2017-07-12T11:23:16.000Z" itemprop="datePublished">Jul 12</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/">第十届全国大学生信息安全竞赛 部分web-writeup</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/05/25/红帽杯线下赛总结/" class="archive-article-date">
-  <time datetime="2017-05-24T16:25:20.000Z" itemprop="datePublished">May 25</time>
-</a>
+        <p>CTFd/utils.py中，smtp邮件服务器鉴权的函数为：</p>
+<pre><code>def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None):
+smtp = smtplib.SMTP(host, port)
+smtp.ehlo()
+if TLS:
+    smtp.starttls()
+    smtp.ehlo()
+smtp.login(username, password)
+return smtp
+</code></pre><p>使用了smtplib.SMTP类，但是如果邮件服务器使用了SSL，则需要使用smtplib.SMTP_SSL类：</p>
+<pre><code>def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None):
+if SSL:
+    smtp = smtplib.SMTP_SSL(host, port)
+    smtp.ehlo()
+elif TLS:
+    smtp = smtplib.SMTP(host, port)
+    smtp.ehlo()
+    smtp.starttls()
+    smtp.ehlo()
+smtp.login(username, password)
+return smtp
+</code></pre>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/25/红帽杯线下赛总结/">红帽杯线下赛总结</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/05/25/红帽杯2017-writeup/" class="archive-article-date">
-  <time datetime="2017-05-24T16:11:58.000Z" itemprop="datePublished">May 25</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/07/16/CTFd-发邮件的坑/" data-id="cjbc9l1gk0004ukvk0j4dw9zs" class="article-share-link">Teilen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/25/红帽杯2017-writeup/">红帽杯2017 writeup</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/03/22/0ctf2017-web-writeup/" class="archive-article-date">
-  <time datetime="2017-03-22T14:26:44.000Z" itemprop="datePublished">Mar 22</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/22/0ctf2017-web-writeup/">0ctf2017-web-writeup</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/03/05/ZCTF2017-web100-write-up/" class="archive-article-date">
-  <time datetime="2017-03-04T16:16:38.000Z" itemprop="datePublished">Mar 5</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/05/ZCTF2017-web100-write-up/">ZCTF2017-web100 write up</a>
-    </h1>
+    <a href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          CTFd--Flask--使用flask-migrate迁移数据库
+        
+      </div>
+    </a>
   
+  
+    <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">第十届全国大学生信息安全竞赛 部分web-writeup</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/01/01/2016HCTF-writeup/" class="archive-article-date">
-  <time datetime="2016-12-31T16:27:32.000Z" itemprop="datePublished">Jan 1</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/01/2016HCTF-writeup/">2016HCTF-writeup</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
 
 </section>
         

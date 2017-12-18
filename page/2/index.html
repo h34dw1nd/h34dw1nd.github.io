@@ -5,36 +5,14 @@
   
 
   
-  <title>2016HCTF-writeup | Headwind&#39;s Blog</title>
+  <title>Headwind&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="写在开头的话2016HCTF应该是我第一场比较认真参加的一场CTF了，由于还是个萌新，啥都不懂，这篇文章就是把当时自己做出来的题的做题思路记录一下（其实早该发了，但是因为我懒【捂脸】），让各位dalao见笑了官方wp在这→HCTF 2016网络攻防大赛官方Writeup膜拜杭电各位大佬 第一层MISC 杂项签到http://139.224.54.27/webco1a/+_+.pcapng用wire">
-<meta name="keywords" content="CTF">
-<meta property="og:type" content="article">
-<meta property="og:title" content="2016HCTF-writeup">
-<meta property="og:url" content="http://h34dw1nd.github.io/2017/01/01/2016HCTF-writeup/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Headwind&#39;s Blog">
+<meta property="og:url" content="http://h34dw1nd.github.io/page/2/index.html">
 <meta property="og:site_name" content="Headwind&#39;s Blog">
-<meta property="og:description" content="写在开头的话2016HCTF应该是我第一场比较认真参加的一场CTF了，由于还是个萌新，啥都不懂，这篇文章就是把当时自己做出来的题的做题思路记录一下（其实早该发了，但是因为我懒【捂脸】），让各位dalao见笑了官方wp在这→HCTF 2016网络攻防大赛官方Writeup膜拜杭电各位大佬 第一层MISC 杂项签到http://139.224.54.27/webco1a/+_+.pcapng用wire">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/ex1-1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/ex1-2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/web2009.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-3.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-4.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/gogogo-1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/gogogo-2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-3.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-4.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-5.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/教练我想打CTF-2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/教练我想打CTF-3.png">
-<meta property="og:updated_time" content="2017-12-18T13:19:32.227Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2016HCTF-writeup">
-<meta name="twitter:description" content="写在开头的话2016HCTF应该是我第一场比较认真参加的一场CTF了，由于还是个萌新，啥都不懂，这篇文章就是把当时自己做出来的题的做题思路记录一下（其实早该发了，但是因为我懒【捂脸】），让各位dalao见笑了官方wp在这→HCTF 2016网络攻防大赛官方Writeup膜拜杭电各位大佬 第一层MISC 杂项签到http://139.224.54.27/webco1a/+_+.pcapng用wire">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/ex1-1.png">
+<meta name="twitter:title" content="Headwind&#39;s Blog">
   
     <link rel="alternate" href="/atom.xml" title="Headwind&#39;s Blog" type="application/atom+xml">
   
@@ -81,7 +59,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-2016HCTF-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-2016HCTF-writeup" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/01/01/2016HCTF-writeup/" class="article-date">
   <time datetime="2016-12-31T16:27:32.000Z" itemprop="datePublished">2017-01-01</time>
@@ -94,8 +74,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      2016HCTF-writeup
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/01/2016HCTF-writeup/">2016HCTF-writeup</a>
     </h1>
   
 
@@ -146,23 +126,16 @@ expect:// — Process Interaction Streams
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2017/03/05/ZCTF2017-web100-write-up/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
-      <div class="article-nav-title">
-        
-          ZCTF2017-web100 write up
-        
-      </div>
-    </a>
-  
-  
-</nav>
+</article>
+
 
   
-</article>
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; zurück</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </section>
         

