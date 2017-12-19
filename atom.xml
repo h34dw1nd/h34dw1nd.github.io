@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.headw1nd.com/"/>
-  <updated>2017-12-19T04:13:27.977Z</updated>
+  <updated>2017-12-19T05:19:16.341Z</updated>
   <id>http://blog.headw1nd.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://blog.headw1nd.com/2017/12/18/Windosw%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%AE%89%E8%A3%85Z3%E7%BA%A6%E6%9D%9F%E6%B1%82%E8%A7%A3%E5%99%A8%E5%B9%B6%E4%BD%BF%E7%94%A8Python-Binding/"/>
     <id>http://blog.headw1nd.com/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/</id>
     <published>2017-12-18T03:23:50.000Z</published>
-    <updated>2017-12-19T04:13:27.977Z</updated>
+    <updated>2017-12-19T05:19:16.341Z</updated>
     
     <content type="html"><![CDATA[<p>Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用。<br>Z3 约束求解器是针对 Satisfiability modulo theories Problem 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决定性问题。虽然 Z3 功能强大，但是从理论上来说，大部分 SMT 问题的时间复杂度都过高，根本不可能在有限时间内解决。所以千万不要把 Z3 想象得过于万能。<br>Z3 在工业应用中实际上常见于软件验证、程序分析等。然而由于功能实在强大，也被用于很多其他领域。就 CTF 领域来说，能够用约束求解器搞定的问题常见于密码题、二进制逆向、符号执行、Fuzzing 模糊测试等。<br>Z3 本身提供一个类似于 Lisp 的内置语言，但是实际使用中，一般使用 Python Binding 操作会比较方便。<br>本文记录了如何在Windows(10 x64)环境下安装Z3并配置使用 Python Binding 。</p><h2 id="0x00-安装前准备"><a href="#0x00-安装前准备" class="headerlink" title="0x00 安装前准备"></a>0x00 安装前准备</h2><p>由于在 Windows 环境下需要用到 Visual Studio Command Prompt 来 build Z3 ，所以需要安装 Visual Studio（或者直接安装 nmake ），我使用的是 Visual Studio 2017 ，直接在开始菜单中找到 VS2017 的文件夹，下拉可以找到 x64 Native Tools Command Prompt for VS 2017</p><h2 id="0x01-安装Z3"><a href="#0x01-安装Z3" class="headerlink" title="0x01 安装Z3"></a>0x01 安装Z3</h2><p>从 github 上 clone Z3</p><pre><code>git clone https://github.com/Z3Prover/z3.git</code></pre><p>打开 x64 Native Tools Command Prompt for VS 2017 ，命令行中进入 Z3 文件夹，执行命令：</p><pre><code>python scripts/mk_make.py -x --pythoncd buildnmake</code></pre><p>经过漫长的等待，当看到</p><pre><code>Z3 was successfully built.&quot;Z3Py scripts can already be executed in the &apos;build\python&apos; directory.&quot;&quot;Z3Py scripts stored in arbitrary directories can be executed if the &apos;build\python&apos; directory is added to the PYTHONPATH environment variable and the &apos;build&apos; directory is added to the PATH environment variable.</code></pre><p>就说明安装成功了。</p><h2 id="0x02-将-Z3-路径加入-PYTHONPATH"><a href="#0x02-将-Z3-路径加入-PYTHONPATH" class="headerlink" title="0x02 将 Z3 路径加入 PYTHONPATH"></a>0x02 将 Z3 路径加入 PYTHONPATH</h2><p>我的电脑-&gt;右键-&gt;属性-&gt;高级系统设置-&gt;环境变量，如果没有 PYTHONPATH 需要自行创建，在 python 命令行界面输入：</p><pre><code>import os print(os.sys.path)</code></pre><p>可以看到当前的 PYTHONPATH ，将其加入环境变量，并把Z3文件夹下的 build\python 文件夹也加入 PYTHONPATH 。<br>测试一下，在 python 命令行下：</p><pre><code>from z3 import *x = Int(&apos;x&apos;)y = Int(&apos;y&apos;)solve(x &gt; 2, y &lt; 10, x + 2*y == 7)</code></pre><p>一般会看到结果：</p><pre><code>[y = 0, x = 7] </code></pre><p>说明配置成功。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><p><a href="https://zhuanlan.zhihu.com/p/30548907" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30548907</a><br><a href="https://github.com/Z3Prover/z3" target="_blank" rel="noopener">https://github.com/Z3Prover/z3</a></p></blockquote>]]></content>
     
