@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://h34dw1nd.github.io/"/>
+  <link href="http://blog.headw1nd.com/"/>
   <updated>2017-12-19T04:13:27.977Z</updated>
-  <id>http://h34dw1nd.github.io/</id>
+  <id>http://blog.headw1nd.com/</id>
   
   <author>
     <name>Headwind</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Windosw环境下安装Z3约束求解器并使用Python Binding</title>
-    <link href="http://h34dw1nd.github.io/2017/12/18/Windosw%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%AE%89%E8%A3%85Z3%E7%BA%A6%E6%9D%9F%E6%B1%82%E8%A7%A3%E5%99%A8%E5%B9%B6%E4%BD%BF%E7%94%A8Python-Binding/"/>
-    <id>http://h34dw1nd.github.io/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/</id>
+    <link href="http://blog.headw1nd.com/2017/12/18/Windosw%E7%8E%AF%E5%A2%83%E4%B8%8B%E5%AE%89%E8%A3%85Z3%E7%BA%A6%E6%9D%9F%E6%B1%82%E8%A7%A3%E5%99%A8%E5%B9%B6%E4%BD%BF%E7%94%A8Python-Binding/"/>
+    <id>http://blog.headw1nd.com/2017/12/18/Windosw环境下安装Z3约束求解器并使用Python-Binding/</id>
     <published>2017-12-18T03:23:50.000Z</published>
     <updated>2017-12-19T04:13:27.977Z</updated>
     
@@ -34,17 +34,17 @@
     
     </summary>
     
-      <category term="工具使用" scheme="http://h34dw1nd.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+      <category term="工具使用" scheme="http://blog.headw1nd.com/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
     
     
-      <category term="Z3" scheme="http://h34dw1nd.github.io/tags/Z3/"/>
+      <category term="Z3" scheme="http://blog.headw1nd.com/tags/Z3/"/>
     
   </entry>
   
   <entry>
     <title>struts2 S2-052 复现及分析</title>
-    <link href="http://h34dw1nd.github.io/2017/09/07/struts2-S2-052-%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/"/>
-    <id>http://h34dw1nd.github.io/2017/09/07/struts2-S2-052-复现及分析/</id>
+    <link href="http://blog.headw1nd.com/2017/09/07/struts2-S2-052-%E5%A4%8D%E7%8E%B0%E5%8F%8A%E5%88%86%E6%9E%90/"/>
+    <id>http://blog.headw1nd.com/2017/09/07/struts2-S2-052-复现及分析/</id>
     <published>2017-09-06T17:09:16.000Z</published>
     <updated>2017-12-19T04:12:09.262Z</updated>
     
@@ -59,17 +59,17 @@
     
     </summary>
     
-      <category term="漏洞分析" scheme="http://h34dw1nd.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
+      <category term="漏洞分析" scheme="http://blog.headw1nd.com/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="漏洞分析, strust2" scheme="http://h34dw1nd.github.io/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90-strust2/"/>
+      <category term="漏洞分析, strust2" scheme="http://blog.headw1nd.com/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90-strust2/"/>
     
   </entry>
   
   <entry>
     <title>XMAN 2017 选拔赛 web部分wp </title>
-    <link href="http://h34dw1nd.github.io/2017/07/18/XMAN-2017-%E9%80%89%E6%8B%94%E8%B5%9B-web%E9%83%A8%E5%88%86wp/"/>
-    <id>http://h34dw1nd.github.io/2017/07/18/XMAN-2017-选拔赛-web部分wp/</id>
+    <link href="http://blog.headw1nd.com/2017/07/18/XMAN-2017-%E9%80%89%E6%8B%94%E8%B5%9B-web%E9%83%A8%E5%88%86wp/"/>
+    <id>http://blog.headw1nd.com/2017/07/18/XMAN-2017-选拔赛-web部分wp/</id>
     <published>2017-07-18T07:34:19.000Z</published>
     <updated>2017-12-19T04:12:11.260Z</updated>
     
@@ -85,17 +85,17 @@
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, XMAN" scheme="http://h34dw1nd.github.io/tags/CTF-XMAN/"/>
+      <category term="CTF, XMAN" scheme="http://blog.headw1nd.com/tags/CTF-XMAN/"/>
     
   </entry>
   
   <entry>
     <title>CTFd--Flask--使用flask-migrate迁移数据库</title>
-    <link href="http://h34dw1nd.github.io/2017/07/16/CTFd-Flask-%E4%BD%BF%E7%94%A8flask-migrate%E8%BF%81%E7%A7%BB%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    <id>http://h34dw1nd.github.io/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/</id>
+    <link href="http://blog.headw1nd.com/2017/07/16/CTFd-Flask-%E4%BD%BF%E7%94%A8flask-migrate%E8%BF%81%E7%A7%BB%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <id>http://blog.headw1nd.com/2017/07/16/CTFd-Flask-使用flask-migrate迁移数据库/</id>
     <published>2017-07-15T19:55:09.000Z</published>
     <updated>2017-12-19T04:12:14.138Z</updated>
     
@@ -111,17 +111,17 @@
     
     </summary>
     
-      <category term="Python" scheme="http://h34dw1nd.github.io/categories/Python/"/>
+      <category term="Python" scheme="http://blog.headw1nd.com/categories/Python/"/>
     
     
-      <category term="Python, CTFd Flask" scheme="http://h34dw1nd.github.io/tags/Python-CTFd-Flask/"/>
+      <category term="Python, CTFd Flask" scheme="http://blog.headw1nd.com/tags/Python-CTFd-Flask/"/>
     
   </entry>
   
   <entry>
     <title>CTFd--发邮件的坑</title>
-    <link href="http://h34dw1nd.github.io/2017/07/16/CTFd-%E5%8F%91%E9%82%AE%E4%BB%B6%E7%9A%84%E5%9D%91/"/>
-    <id>http://h34dw1nd.github.io/2017/07/16/CTFd-发邮件的坑/</id>
+    <link href="http://blog.headw1nd.com/2017/07/16/CTFd-%E5%8F%91%E9%82%AE%E4%BB%B6%E7%9A%84%E5%9D%91/"/>
+    <id>http://blog.headw1nd.com/2017/07/16/CTFd-发邮件的坑/</id>
     <published>2017-07-15T19:48:26.000Z</published>
     <updated>2017-12-19T04:12:17.030Z</updated>
     
@@ -138,17 +138,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="Python" scheme="http://h34dw1nd.github.io/categories/Python/"/>
+      <category term="Python" scheme="http://blog.headw1nd.com/categories/Python/"/>
     
     
-      <category term="Python, CTFd" scheme="http://h34dw1nd.github.io/tags/Python-CTFd/"/>
+      <category term="Python, CTFd" scheme="http://blog.headw1nd.com/tags/Python-CTFd/"/>
     
   </entry>
   
   <entry>
     <title>第十届全国大学生信息安全竞赛 部分web-writeup</title>
-    <link href="http://h34dw1nd.github.io/2017/07/12/%E7%AC%AC%E5%8D%81%E5%B1%8A%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B-%E9%83%A8%E5%88%86web-writeup/"/>
-    <id>http://h34dw1nd.github.io/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/</id>
+    <link href="http://blog.headw1nd.com/2017/07/12/%E7%AC%AC%E5%8D%81%E5%B1%8A%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B-%E9%83%A8%E5%88%86web-writeup/"/>
+    <id>http://blog.headw1nd.com/2017/07/12/第十届全国大学生信息安全竞赛-部分web-writeup/</id>
     <published>2017-07-12T11:23:16.000Z</published>
     <updated>2017-12-19T04:12:32.093Z</updated>
     
@@ -163,17 +163,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, 全国大学生信息安全竞赛, ciscn" scheme="http://h34dw1nd.github.io/tags/CTF-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B-ciscn/"/>
+      <category term="CTF, 全国大学生信息安全竞赛, ciscn" scheme="http://blog.headw1nd.com/tags/CTF-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B-ciscn/"/>
     
   </entry>
   
   <entry>
     <title>收集一下各位师傅的个人博客和各种安全博客（个人备忘）</title>
-    <link href="http://h34dw1nd.github.io/2017/06/14/%E6%94%B6%E9%9B%86%E4%B8%80%E4%B8%8B%E5%90%84%E4%BD%8D%E5%B8%88%E5%82%85%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%92%8C%E5%90%84%E7%A7%8D%E5%AE%89%E5%85%A8%E5%8D%9A%E5%AE%A2%EF%BC%88%E4%B8%AA%E4%BA%BA%E5%A4%87%E5%BF%98%EF%BC%89/"/>
-    <id>http://h34dw1nd.github.io/2017/06/14/收集一下各位师傅的个人博客和各种安全博客（个人备忘）/</id>
+    <link href="http://blog.headw1nd.com/2017/06/14/%E6%94%B6%E9%9B%86%E4%B8%80%E4%B8%8B%E5%90%84%E4%BD%8D%E5%B8%88%E5%82%85%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%92%8C%E5%90%84%E7%A7%8D%E5%AE%89%E5%85%A8%E5%8D%9A%E5%AE%A2%EF%BC%88%E4%B8%AA%E4%BA%BA%E5%A4%87%E5%BF%98%EF%BC%89/"/>
+    <id>http://blog.headw1nd.com/2017/06/14/收集一下各位师傅的个人博客和各种安全博客（个人备忘）/</id>
     <published>2017-06-14T13:20:14.000Z</published>
     <updated>2017-12-19T04:09:19.971Z</updated>
     
@@ -188,17 +188,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="瞎写" scheme="http://h34dw1nd.github.io/categories/%E7%9E%8E%E5%86%99/"/>
+      <category term="瞎写" scheme="http://blog.headw1nd.com/categories/%E7%9E%8E%E5%86%99/"/>
     
     
-      <category term="博客" scheme="http://h34dw1nd.github.io/tags/%E5%8D%9A%E5%AE%A2/"/>
+      <category term="博客" scheme="http://blog.headw1nd.com/tags/%E5%8D%9A%E5%AE%A2/"/>
     
   </entry>
   
   <entry>
     <title>红帽杯线下赛总结</title>
-    <link href="http://h34dw1nd.github.io/2017/05/25/%E7%BA%A2%E5%B8%BD%E6%9D%AF%E7%BA%BF%E4%B8%8B%E8%B5%9B%E6%80%BB%E7%BB%93/"/>
-    <id>http://h34dw1nd.github.io/2017/05/25/红帽杯线下赛总结/</id>
+    <link href="http://blog.headw1nd.com/2017/05/25/%E7%BA%A2%E5%B8%BD%E6%9D%AF%E7%BA%BF%E4%B8%8B%E8%B5%9B%E6%80%BB%E7%BB%93/"/>
+    <id>http://blog.headw1nd.com/2017/05/25/红帽杯线下赛总结/</id>
     <published>2017-05-24T16:25:20.000Z</published>
     <updated>2017-12-19T04:12:55.200Z</updated>
     
@@ -216,17 +216,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, 红帽杯" scheme="http://h34dw1nd.github.io/tags/CTF-%E7%BA%A2%E5%B8%BD%E6%9D%AF/"/>
+      <category term="CTF, 红帽杯" scheme="http://blog.headw1nd.com/tags/CTF-%E7%BA%A2%E5%B8%BD%E6%9D%AF/"/>
     
   </entry>
   
   <entry>
     <title>红帽杯2017 writeup</title>
-    <link href="http://h34dw1nd.github.io/2017/05/25/%E7%BA%A2%E5%B8%BD%E6%9D%AF2017-writeup/"/>
-    <id>http://h34dw1nd.github.io/2017/05/25/红帽杯2017-writeup/</id>
+    <link href="http://blog.headw1nd.com/2017/05/25/%E7%BA%A2%E5%B8%BD%E6%9D%AF2017-writeup/"/>
+    <id>http://blog.headw1nd.com/2017/05/25/红帽杯2017-writeup/</id>
     <published>2017-05-24T16:11:58.000Z</published>
     <updated>2017-12-19T04:12:43.956Z</updated>
     
@@ -242,17 +242,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, 红帽杯" scheme="http://h34dw1nd.github.io/tags/CTF-%E7%BA%A2%E5%B8%BD%E6%9D%AF/"/>
+      <category term="CTF, 红帽杯" scheme="http://blog.headw1nd.com/tags/CTF-%E7%BA%A2%E5%B8%BD%E6%9D%AF/"/>
     
   </entry>
   
   <entry>
     <title>0ctf2017-web-writeup</title>
-    <link href="http://h34dw1nd.github.io/2017/03/22/0ctf2017-web-writeup/"/>
-    <id>http://h34dw1nd.github.io/2017/03/22/0ctf2017-web-writeup/</id>
+    <link href="http://blog.headw1nd.com/2017/03/22/0ctf2017-web-writeup/"/>
+    <id>http://blog.headw1nd.com/2017/03/22/0ctf2017-web-writeup/</id>
     <published>2017-03-22T14:26:44.000Z</published>
     <updated>2017-12-19T04:13:11.619Z</updated>
     
@@ -267,17 +267,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, 0CTF" scheme="http://h34dw1nd.github.io/tags/CTF-0CTF/"/>
+      <category term="CTF, 0CTF" scheme="http://blog.headw1nd.com/tags/CTF-0CTF/"/>
     
   </entry>
   
   <entry>
     <title>ZCTF2017-web100 write up</title>
-    <link href="http://h34dw1nd.github.io/2017/03/05/ZCTF2017-web100-write-up/"/>
-    <id>http://h34dw1nd.github.io/2017/03/05/ZCTF2017-web100-write-up/</id>
+    <link href="http://blog.headw1nd.com/2017/03/05/ZCTF2017-web100-write-up/"/>
+    <id>http://blog.headw1nd.com/2017/03/05/ZCTF2017-web100-write-up/</id>
     <published>2017-03-04T16:16:38.000Z</published>
     <updated>2017-12-19T04:13:10.433Z</updated>
     
@@ -292,17 +292,17 @@ smtp = smtplib
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, ZCTF" scheme="http://h34dw1nd.github.io/tags/CTF-ZCTF/"/>
+      <category term="CTF, ZCTF" scheme="http://blog.headw1nd.com/tags/CTF-ZCTF/"/>
     
   </entry>
   
   <entry>
     <title>2016HCTF-writeup</title>
-    <link href="http://h34dw1nd.github.io/2017/01/01/2016HCTF-writeup/"/>
-    <id>http://h34dw1nd.github.io/2017/01/01/2016HCTF-writeup/</id>
+    <link href="http://blog.headw1nd.com/2017/01/01/2016HCTF-writeup/"/>
+    <id>http://blog.headw1nd.com/2017/01/01/2016HCTF-writeup/</id>
     <published>2016-12-31T16:27:32.000Z</published>
     <updated>2017-12-19T04:13:15.087Z</updated>
     
@@ -317,10 +317,10 @@ smtp = smtplib
     
     </summary>
     
-      <category term="CTF" scheme="http://h34dw1nd.github.io/categories/CTF/"/>
+      <category term="CTF" scheme="http://blog.headw1nd.com/categories/CTF/"/>
     
     
-      <category term="CTF, HCTF" scheme="http://h34dw1nd.github.io/tags/CTF-HCTF/"/>
+      <category term="CTF, HCTF" scheme="http://blog.headw1nd.com/tags/CTF-HCTF/"/>
     
   </entry>
   
